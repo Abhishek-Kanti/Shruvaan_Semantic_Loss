@@ -39,7 +39,6 @@ class Cryptor:
         # Step 6: Bundle result
         encrypted_packet = {
             "ciphertext": ciphertext,
-            "hkp_salt": salt,
             "pop": pop,
             "metadata": {
                 "role": role,
@@ -53,7 +52,6 @@ class Cryptor:
             event="Encrypt",
             details={
                 "hctx": hctx,
-                "hkp_salt": salt,
                 "pop": pop,
                 "role": role,
                 "epoch": epoch
