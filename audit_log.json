@@ -1,0 +1,37 @@
+[
+  {
+    "timestamp": "2025-08-19T22:47:31.546870+00:00",
+    "component": "Prompter",
+    "event": "Normalize",
+    "details": {
+      "raw_instruction": "transfer $9000 from 56789 to 45678",
+      "normalized": {
+        "action": "transfer",
+        "amount": 9000,
+        "currency": "$",
+        "from_account": "56789",
+        "to_account": "45678",
+        "policy": "\u226410000",
+        "role": "TellerAgent",
+        "epoch": "2025-08-19T22:47:31.546870+00:00",
+        "raw_instruction": "transfer $9000 from 56789 to 45678"
+      }
+    },
+    "prev_hash": null,
+    "hash": "1d74e2e27b5506ab808f0bfb11523b46619aa66eeb07afac6c337540066e8bff"
+  },
+  {
+    "timestamp": "2025-08-19T22:47:31.548863+00:00",
+    "component": "Cryptor",
+    "event": "Encrypt",
+    "details": {
+      "hctx": "85f99adc103e09030a17e56af873ac7c1f36292c67c9e14c2715ab19fc4e4437",
+      "hkp_salt": "041c73438b242799efad08e572f9c29ee98f63b97c065ab75985f4ef645700e3",
+      "pop": "558a5da62e23cde179e2ce58380de087a46371b9f3ffd835646ac9d49c8ec2e8",
+      "role": "TellerAgent",
+      "epoch": "2025-08-19T22:47:31.546870+00:00"
+    },
+    "prev_hash": "1d74e2e27b5506ab808f0bfb11523b46619aa66eeb07afac6c337540066e8bff",
+    "hash": "3143c148d8c49d76fc7e7423434a49806bfa034935c97cfa067708a51f15e566"
+  }
+]
