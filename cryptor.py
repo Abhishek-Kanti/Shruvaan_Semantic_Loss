@@ -2,41 +2,47 @@ import hashlib
 import json
 import base64
 from cryptography.fernet import Fernet
-from datetime import datetime, timezone
 from audit_logger import AuditLogger
-
 
 class Cryptor:
     def __init__(self, logger: AuditLogger = None):
         self.logger = logger or AuditLogger()
-        
-    def _hash(self, data: str):
-        return hashlib.sha256(data.encode()).hexdigest()
+
+    def _hash_hex(self, s: str) -> str:
+        return hashlib.sha256(s.encode()).hexdigest()
+
+    def _hkp_key_bytes(self, hctx_hex: str, salt_hex: str) -> bytes:
+        # Derive HKP key as raw 32-byte digest from concatenated hex strings.
+        material = (hctx_hex + salt_hex).encode()
+        return hashlib.sha256(material).digest()  # 32 bytes
 
     def encrypt(self, normalized_instruction: dict):
-        # Step 1: Semantic hash of raw instruction
-        hctx = self._hash(normalized_instruction["raw_instruction"])
+        # 1) hctx from raw instruction
+        hctx_hex = self._hash_hex(normalized_instruction["raw_instruction"])
 
-        # Step 2: HKP salt based on role + policy + epoch
+        # 2) salt = H(role + policy + epoch)  (hex)
         role = normalized_instruction.get("role", "")
         policy = normalized_instruction.get("policy", "")
         epoch = normalized_instruction.get("epoch", "")
-        salt = self._hash(role + policy + epoch)
+        salt_hex = self._hash_hex(role + policy + epoch)
 
-        # Step 3: HKP key = H(hctx + salt)
-        hkp_key = self._hash(hctx + salt)
+        # 3) HKP key bytes & Fernet key
+        hkp_key_bytes = self._hkp_key_bytes(hctx_hex, salt_hex)
+        fernet_key = base64.urlsafe_b64encode(hkp_key_bytes)  # 32-byte -> urlsafe b64
 
-        # Step 4: Symmetric encryption key (Fernet requires 32-byte base64)
-        fernet_key = base64.urlsafe_b64encode(hkp_key.encode()[:32])
         cipher = Fernet(fernet_key)
 
-        payload = json.dumps(normalized_instruction).encode()
-        ciphertext = cipher.encrypt(payload).decode()
+        # 4) Canonicalize payload (must match decryptor)
+        canonical_payload = json.dumps(
+            normalized_instruction, sort_keys=True, separators=(",", ":")
+        )
 
-        # Step 5: Proof-of-Protocol (PoP) = H(payload + role + epoch)
-        pop = self._hash(json.dumps(normalized_instruction) + role + epoch)
+        ciphertext = cipher.encrypt(canonical_payload.encode()).decode()
 
-        # Step 6: Bundle result
+        # 5) PoP over canonical payload + role + epoch
+        pop = self._hash_hex(canonical_payload + role + epoch)
+
+        # 6) Packet (do NOT include salt)
         encrypted_packet = {
             "ciphertext": ciphertext,
             "pop": pop,
@@ -46,12 +52,12 @@ class Cryptor:
             }
         }
 
-        # Step 7: Audit log
+        # 7) Audit log (salt is derivable but logging it is OK)
         self.logger.log(
             component="Cryptor",
             event="Encrypt",
             details={
-                "hctx": hctx,
+                "hctx": hctx_hex,
                 "pop": pop,
                 "role": role,
                 "epoch": epoch

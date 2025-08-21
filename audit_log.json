@@ -1,6 +1,6 @@
 [
   {
-    "timestamp": "2025-08-19T22:47:31.546870+00:00",
+    "timestamp": "2025-08-21T13:52:29.166565+00:00",
     "component": "Prompter",
     "event": "Normalize",
     "details": {
@@ -13,25 +13,38 @@
         "to_account": "45678",
         "policy": "\u226410000",
         "role": "TellerAgent",
-        "epoch": "2025-08-19T22:47:31.546870+00:00",
+        "epoch": "2025-08-21T13:52:29.166565+00:00",
         "raw_instruction": "transfer $9000 from 56789 to 45678"
       }
     },
     "prev_hash": null,
-    "hash": "1d74e2e27b5506ab808f0bfb11523b46619aa66eeb07afac6c337540066e8bff"
+    "hash": "aaab094bc1d068f580b6d97e6b570bae960cb0b79abc694e67f319810d774948"
   },
   {
-    "timestamp": "2025-08-19T22:47:31.548863+00:00",
+    "timestamp": "2025-08-21T13:52:29.431471+00:00",
     "component": "Cryptor",
     "event": "Encrypt",
     "details": {
       "hctx": "85f99adc103e09030a17e56af873ac7c1f36292c67c9e14c2715ab19fc4e4437",
-      "hkp_salt": "041c73438b242799efad08e572f9c29ee98f63b97c065ab75985f4ef645700e3",
-      "pop": "558a5da62e23cde179e2ce58380de087a46371b9f3ffd835646ac9d49c8ec2e8",
+      "pop": "186ee56a0a1f5ab08e50b56fc5a28888620f808e2784123ef769752720ef90fb",
       "role": "TellerAgent",
-      "epoch": "2025-08-19T22:47:31.546870+00:00"
+      "epoch": "2025-08-21T13:52:29.166565+00:00"
     },
-    "prev_hash": "1d74e2e27b5506ab808f0bfb11523b46619aa66eeb07afac6c337540066e8bff",
-    "hash": "3143c148d8c49d76fc7e7423434a49806bfa034935c97cfa067708a51f15e566"
+    "prev_hash": "aaab094bc1d068f580b6d97e6b570bae960cb0b79abc694e67f319810d774948",
+    "hash": "67c5dc91157037031f107e2318f8b768e20175610812e192fb9ba3ec54616a2f"
+  },
+  {
+    "timestamp": "2025-08-21T13:52:29.438137+00:00",
+    "component": "Decryptor",
+    "event": "Decrypt",
+    "details": {
+      "status": "SUCCESS",
+      "pop": "186ee56a0a1f5ab08e50b56fc5a28888620f808e2784123ef769752720ef90fb",
+      "role": "TellerAgent",
+      "epoch": "2025-08-21T13:52:29.166565+00:00",
+      "hctx": "85f99adc103e09030a17e56af873ac7c1f36292c67c9e14c2715ab19fc4e4437"
+    },
+    "prev_hash": "67c5dc91157037031f107e2318f8b768e20175610812e192fb9ba3ec54616a2f",
+    "hash": "11450234ea2afae759f7c418d3f4a53766a60ca53ad9c0cb8681ea1379de3233"
   }
 ]
