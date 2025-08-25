@@ -1,50 +1,110 @@
 [
   {
-    "timestamp": "2025-08-21T13:52:29.166565+00:00",
+    "timestamp": "2025-08-25T19:12:06.298659+00:00",
     "component": "Prompter",
     "event": "Normalize",
     "details": {
-      "raw_instruction": "transfer $9000 from 56789 to 45678",
+      "raw_instruction": "transfer $1000 from 42000 to 60000",
       "normalized": {
         "action": "transfer",
-        "amount": 9000,
+        "amount": 1000,
         "currency": "$",
-        "from_account": "56789",
-        "to_account": "45678",
+        "from_account": "42000",
+        "to_account": "60000",
         "policy": "\u226410000",
         "role": "TellerAgent",
-        "epoch": "2025-08-21T13:52:29.166565+00:00",
-        "raw_instruction": "transfer $9000 from 56789 to 45678"
+        "epoch": "2025-08-25T19:12:06.298659+00:00",
+        "raw_instruction": "transfer $1000 from 42000 to 60000"
       }
     },
     "prev_hash": null,
-    "hash": "aaab094bc1d068f580b6d97e6b570bae960cb0b79abc694e67f319810d774948"
+    "hash": "a3245be415a06544d8d3512a6ae606210b57de723ffa42b891efad69b326c76a"
   },
   {
-    "timestamp": "2025-08-21T13:52:29.431471+00:00",
+    "timestamp": "2025-08-25T19:12:06.311658+00:00",
     "component": "Cryptor",
     "event": "Encrypt",
     "details": {
-      "hctx": "85f99adc103e09030a17e56af873ac7c1f36292c67c9e14c2715ab19fc4e4437",
-      "pop": "186ee56a0a1f5ab08e50b56fc5a28888620f808e2784123ef769752720ef90fb",
+      "hctx": "627410c36be684e6bcbab420961fca895f03ad16ec856422cd3258483c5afee0",
+      "salt": "a037f640e56c2ac14397b605e88bc9f5a3305d6e85cfe80156bfcdcb3bacb256",
       "role": "TellerAgent",
-      "epoch": "2025-08-21T13:52:29.166565+00:00"
+      "epoch": "2025-08-25T19:12:06.298659+00:00",
+      "shape": "dict:9"
     },
-    "prev_hash": "aaab094bc1d068f580b6d97e6b570bae960cb0b79abc694e67f319810d774948",
-    "hash": "67c5dc91157037031f107e2318f8b768e20175610812e192fb9ba3ec54616a2f"
+    "prev_hash": "a3245be415a06544d8d3512a6ae606210b57de723ffa42b891efad69b326c76a",
+    "hash": "35701af8a82e62b857ceec428a159da171d0b129d0a6e36f13797add50591972"
   },
   {
-    "timestamp": "2025-08-21T13:52:29.438137+00:00",
+    "timestamp": "2025-08-25T19:12:06.358681+00:00",
     "component": "Decryptor",
     "event": "Decrypt",
     "details": {
-      "status": "SUCCESS",
-      "pop": "186ee56a0a1f5ab08e50b56fc5a28888620f808e2784123ef769752720ef90fb",
       "role": "TellerAgent",
-      "epoch": "2025-08-21T13:52:29.166565+00:00",
-      "hctx": "85f99adc103e09030a17e56af873ac7c1f36292c67c9e14c2715ab19fc4e4437"
+      "epoch": "2025-08-25T19:12:06.298659+00:00",
+      "ok": true,
+      "field_count": 9
     },
-    "prev_hash": "67c5dc91157037031f107e2318f8b768e20175610812e192fb9ba3ec54616a2f",
-    "hash": "11450234ea2afae759f7c418d3f4a53766a60ca53ad9c0cb8681ea1379de3233"
+    "prev_hash": "35701af8a82e62b857ceec428a159da171d0b129d0a6e36f13797add50591972",
+    "hash": "5ca5bca470226c0f8559c6f0d7e31a87791e1ba7685ba75063216c92713e020e"
+  },
+  {
+    "timestamp": "2025-08-25T19:12:08.290614+00:00",
+    "component": "Mimicus",
+    "event": "LLMRawResponse",
+    "details": {
+      "raw": "```json\n{\"action\": \"transfer\", \"amount\": 8000, \"currency\": \"$\", \"from_account\": \"12389\", \"to_account\": \"57986\", \"policy\": \"\\u226410000\", \"role\": \"TellerAgent\", \"epoch\": \"2025-08-25T19:12:06.298659+00:00\", \"raw_instruction\": \"transfer $8000 from 12389 to 57986\"}\n```"
+    },
+    "prev_hash": "5ca5bca470226c0f8559c6f0d7e31a87791e1ba7685ba75063216c92713e020e",
+    "hash": "46afd985c37dbe1054ff0dbdd909e15705afb4dfd01804531c42ae2f814776b9"
+  },
+  {
+    "timestamp": "2025-08-25T19:12:08.291619+00:00",
+    "component": "Mimicus",
+    "event": "Probe",
+    "details": {
+      "encrypted_snapshot": {
+        "enc_map": {
+          "gAAAAABorLWGzZzBdzz6nqn3AyU5lLwtax9YFaetmOAqus2ILS5fAlgkB6DLyK1jayD2OKNdOFXWso17DqPlC5GYE7PGD6GoTQ==": "gAAAAABorLWGlGYN8cUsqBxWzoTDntyIeBMcnO_tVSrpj5e9VPc0T8_Soi-g2C7_IR6_kHSPZQIDPsH_yfo1eWV5KUzBmosmgw==",
+          "gAAAAABorLWGwmU2lgwV10Niji9nB12GwDKGZaN0_4PHiyuFMMhUy2ZEYVS5eoHx_4WqO3G-i8_CKh7rRGd7BEBDuE6m1-L5KQ==": "gAAAAABorLWGZtwz7qXH0KhZImcPbe0eiLXamDm_M-a7_QzMXyUfEiMkdKGP0EL4tiE8tYxgwB4sO1c2YJ3JsiRjRueLVtulkw==",
+          "gAAAAABorLWGH9SSEEswPokoxYhyoIlhl9EwXpkRYiq20YS0wyAuzGxnyXpjJcWSzfX9QzfrnixE-cfxasqUHDrBiK_YUsvtcQ==": "gAAAAABorLWGtQOhHdAYxNegHsnDd70BRp8_2MGqxe5-cTRrzMtjQdpro-NC8ylFYNlXrfDwhBXcL8c-Z9VKKSC4L4GRODMomw==",
+          "gAAAAABorLWGEZJHXkm_7jeXlv_O-hXBvbgwjO2LzJSyPHTIGC7Y6Qo8pz8HRYKtHF_1a3yG1rlnYeGlTyAxVtKrm51_Uc8XrQ==": "gAAAAABorLWGPUEKyoR75C4a2PP5WDgY-Yw3YaDc6ZgNiR5m_Ewz3BfaHl-yXu6gf2Tkgr4XqWfrsMzwhnpvzOBGkM40meOOdw==",
+          "gAAAAABorLWGJ8ADoOJ9GfhUiiTWnpaMENH7WgmabPPiXJR3lWcoucCSRGa9yOhp8NL4k3zLAYQKn8Axn9Hf7XLE09GkQ6DDoQ==": "gAAAAABorLWGTAq0sw2ifb3Lhjkc0iGZtNn53FJSHe42qZHCm6RUe3XI7fWrriGJ3hymn_GxVtLk7nVKeLyIKmZfd908RjRTPQ==",
+          "gAAAAABorLWGk3K4jHNNBR__yF2FyLClergXNYZaYmbIm2webYyuzIGeY_105TgNNhyk3MR8e2nEEHVlLhoa9gjo2rnUlbx4Wg==": "gAAAAABorLWG_NEKZE87q4oifR0dQ-oBDe4CTMjkwWxD-5rTX-0PB7IPzmkP6kHMrP97L6tWqzaaPKfIcjP548Qh2lis-AVCqQ==",
+          "gAAAAABorLWGJ0R7NnvjSNikhnOUe_K89KaefGTzzN8OEsZ7mcN4YaNw77cGvf-C4kR_gKhPfLL02iEQUcVYRK0ZuEOobh5dWA==": "gAAAAABorLWGM5q64NNx9OSePhng14PlrU5cJQhH0r2Hd1X9ZUJ76khNEsGOSkD-NRJeNhyJI6oGFVc06Gr0VG8tZoPiEGN5Eg==",
+          "gAAAAABorLWGUqMfJDrZeMjYD8QQAxbMTB7Ad1MLEs9WhWxQH6nVNZKAmZG5O5CzHF0wOJ_hLegd1NzXqg6Z5NGO4H4udpYe9A==": "gAAAAABorLWGBSIgN0URNSi-y8FiTMW4e8JiYmpUxEFtcJcRsj7dHDM_CZ9UP13ND1xAY_J2K7HcpaDSLCcMc4OAZOuDHC83aly21bNMUEArjYCPieyE3I-CPLeB3-NHeP4VWxR35pvG",
+          "gAAAAABorLWGw2hJU2ShudMhU-86HPhZULS2iXKiR8iu0heGBwxIjCQa3vE4O6TLrldFVdLPxrvSpDeBV3KjKhLGD-733FPSNw==": "gAAAAABorLWGkpwiHgrK2vGYRbVZuDW9xbKLdGFGlw9T1R-mYUYAzoeyEKo18t8rI8YfZLtlGILntx1edmcGtIJ0QaeRO2HWhMsWKu-nwMqoS1x2sCRDjh65_2fkKXYNqAdfkFMmvOog"
+        },
+        "pop": "44f8189b7e05a6f6f95653c7bb53bfefdfa0d4beec1110feed284c1bdfc7ad91",
+        "metadata": {
+          "role": "TellerAgent",
+          "epoch": "2025-08-25T19:12:06.298659+00:00",
+          "kdf": {
+            "hctx": "627410c36be684e6bcbab420961fca895f03ad16ec856422cd3258483c5afee0",
+            "salt": "a037f640e56c2ac14397b605e88bc9f5a3305d6e85cfe80156bfcdcb3bacb256"
+          }
+        }
+      },
+      "mimic_fields": {
+        "action": "transfer",
+        "amount": 8000,
+        "currency": "$",
+        "from_account": "12389",
+        "to_account": "57986",
+        "policy": "\u226410000",
+        "role": "TellerAgent",
+        "epoch": "2025-08-25T19:12:06.298659+00:00",
+        "raw_instruction": "transfer $8000 from 12389 to 57986"
+      },
+      "components": {
+        "entity_recovery": 0.5833333333333334,
+        "structural_fidelity": 0.5555555555555556,
+        "semantic_drift": 0.0,
+        "leakage_score": 0.4555555555555556
+      },
+      "leakage_score": 0.4555555555555556,
+      "decision": "ok"
+    },
+    "prev_hash": "46afd985c37dbe1054ff0dbdd909e15705afb4dfd01804531c42ae2f814776b9",
+    "hash": "07a0a398b57fd0aba75724d0beac8ec0bc7c523688ee179dc9f72c69d829367d"
   }
 ]

@@ -3,25 +3,24 @@ from prompter import Prompter
 from cryptor import Cryptor
 from decryptor import Decryptor
 from mimicus import run_mimicus
-from policy import PolicyStore
 import os
 from dotenv import load_dotenv
 import json
+from crypto_history_logger import CryptoHistoryLogger
 
 # === Setup ===
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 
-# Shared audit logger (single log file for all components)
 logger = AuditLogger()
-ps = PolicyStore(policies={"TellerAgent": "≤10000"})
+history_logger = CryptoHistoryLogger()
 
 p = Prompter(api_key=api_key, logger=logger)
-c = Cryptor(logger=logger)
-d = Decryptor(logger=logger, policy_store=ps)
+c = Cryptor(logger=logger, history_logger=history_logger)
+d = Decryptor(logger=logger, history_logger=history_logger)
 
 print("\n=== Instruction ===")
-instruction = "transfer $9000 from 56789 to 45678"
+instruction = "transfer $1000 from 42000 to 60000"
 print(f"Instruction: {instruction}")
 
 # 1. Normalize
@@ -32,16 +31,16 @@ print(json.dumps(normalized, indent=2))
 # 2. Encrypt
 print("\n=== Encrypt ===")
 packet = c.encrypt(normalized)
-print(json.dumps(packet, indent=2))
+print(json.dumps(packet, indent=2)[:500] + " ...")  # trunc to avoid huge output
 
 # 3. Decrypt
 print("\n=== Decrypt ===")
-recovered = d.decrypt(packet, expected_role="TellerAgent")
+recovered = d.decrypt(packet)
 print(json.dumps(recovered, indent=2))
 
 # 4. Run Mimicus probe on decrypted output
 print("\n=== Running Mimicus Probe ===")
-mimic_result = run_mimicus(recovered)
+mimic_result = run_mimicus(recovered, packet, logger=logger, history_logger=history_logger)
 
 print("\nMimic Fields:")
 print(json.dumps(mimic_result["mimic_fields"], indent=2))
