@@ -43,11 +43,11 @@ regex==2025.8.29
 requests==2.32.5
 rsa==4.9.1
 safetensors==0.6.2
-sympy==1.14.0
+sympy==1.13.1
 tokenizers==0.22.0
-torch==2.8.0
-torchaudio==2.8.0
-torchvision==0.23.0
+torch==2.5.1+cu121
+torchaudio==2.5.1+cu121
+torchvision==0.20.1+cu121
 tqdm==4.67.1
 transformers==4.56.0
 typing-inspection==0.4.1
