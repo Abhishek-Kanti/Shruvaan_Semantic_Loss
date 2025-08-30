@@ -304,56 +304,5 @@
       "epoch": "2025-08-25T19:05:44.286056+00:00",
       "raw_instruction": "transfer $8000 from 12389 to 57986"
     }
-  },
-  {
-    "timestamp": "2025-08-28T11:47:37.383275+00:00",
-    "encrypted": {
-      "enc_map": {
-        "gAAAAABosEHZECvsro_dgvSM5mQrHWMFZxBtkgvndruwF6R-sli-Biy8J3rfYe3a3YF2uKtJoeugZKrXumNBqbtsaqmB3z1DZA==": "gAAAAABosEHZ5w4n5eRenNuAicJEXhJbYZSx8aS4srV9VrOnzVYVKuT98tyqkN4AcliK3EE97hvXfVtdRta05thMqo5S0Dev_Q==",
-        "gAAAAABosEHZdorhdCv-ozziERILxGjjkcqEcAOgxrMWAgUKtQdsxbBF-ueX_n_WN1waBnKx2-bzUZ1ylcL52AIgl2hlxKgZvw==": "gAAAAABosEHZyVAVtvFH_14nsI6vjFNYA1p2LWA31jEJPgTks3dsBqOtXiqvtiS7SLcYFzAXZ5tFcP8jPmjbrJ_CTz02_4CA9Q==",
-        "gAAAAABosEHZPtktcsXwxNYCvfo0yagq0cePeO9trOuDI67mBjU8zGxJJjFHuD7ohhBx2B0imf4xoEIYJsMwF7dvXGQPYrr0gQ==": "gAAAAABosEHZ-oKRzrvMLrKHcPidRcyaQ6iBduEAXMUpjIN7A-nFCyr9-7gG4UlGwWvGc8nU222aqiOfMJsOy-6Vzc6zDlYB-A==",
-        "gAAAAABosEHZAzmvjvIxOCeFMTaCIqM_bBFbNfJY2ABn0mA1YlyKQTS2NOQ1iz1ZW9gqlD4UH8IvEM-JDcQwCOrQy_swv8Vzag==": "gAAAAABosEHZ6agufu6xQ9UFeJXLzwCR18eP0imWUqrzy6BLmXP1gh89l_4zU2gevVkoYJAoaDAPSLRXc16ms7W7URrXLtkm7g==",
-        "gAAAAABosEHZb_nCrekFLbhmKY7XjW3-g_9RCSpN0vWkfCpTY0h4WOPPusd-fPLE6X9WZv4n0F0rwzgXeCQ-MRySaP03YIBlMQ==": "gAAAAABosEHZAR-c-8NQ7lwSv2l6grHF4AP0kMyFUrLK37-TTe6o36cYcRn0IBnjBOrztIaPJA-Y7jeOQbIkcZigRX3zmIbb4Q==",
-        "gAAAAABosEHZtOqR53fhMaPM-JIaeAS7ps4dj7EW0pamMzJDWCtIgGPi2Bl8CnMcrSGZ7y6adofhVr5xW8NiyaeIGmKTVXgtvw==": "gAAAAABosEHZ7r3ZAplCuF1EUz5c8iAtNWBu561FKvFrXhzj6teR1JIhdw8Mem35Z4k79JGy4FQeJ2Ac5mo11Ji8nfsSn8GXsA==",
-        "gAAAAABosEHZlHp6t_dSrOEiugFhCbUw9Ay3Zl7ysl9_b4m5qPp0t_wxYZYmpONYQ_CnZWFFuw2Lgx0-gJEHJWrj_jhdofmyXw==": "gAAAAABosEHZJP5Dglu272daG1ieP4NoUanqacocO4UXXRzmqUP5V2nOPD60Z3mcM7aVteTsKmOMiyyTzNEOX5e1DlCPorXWQA==",
-        "gAAAAABosEHZrT6fSF6TikrOES_FKPDLsD1hb9fHthmYGBUv4ghtV30oIldd5S3nG7eQCTLTC8LgrF8Vh5XmL2mUlYmS32meqg==": "gAAAAABosEHZ6FKVUblHH_wFVSZbe-l-ufdgpEW68p56NFOyEGwFMXIkR3r7S8NUWTlZj9nZi2oPc1cn45wPX7Vsn-dJPY2SOaXHESWHe767JeftsOB2kvagyZ8P4dxgpPNcmqTMYXsT",
-        "gAAAAABosEHZASvAT8GCo7wZhdSGn4eT1PQswWj028ZrZcxqxJZX7oodngCSVbe3XUboHsK6WDZm6WExni6UYKlZUNl_XEnTAQ==": "gAAAAABosEHZvTkeFeILl-XBTsoDZVLwVCtuqGRICsV6NfBnNWJeZZulSYkbbHqXMs3gUNJ9ohWq5bn-UL39AYOduWVBUPr-GeDXK_1bOjhD6SFngGr_37pk9snXIZnswLHB2uwmi39A"
-      },
-      "pop": "bcb30523aaf8c299b1f6cd5ba96373c618e0d72431e29ddc5a46f8be6f0be21d",
-      "metadata": {
-        "role": "TellerAgent",
-        "epoch": "2025-08-28T11:47:37.380317+00:00",
-        "kdf": {
-          "hctx": "627410c36be684e6bcbab420961fca895f03ad16ec856422cd3258483c5afee0",
-          "salt": "46459244763b303508fcd9d759226f885f410dfb72fe2f2e5291231a7a18ce49"
-        }
-      }
-    },
-    "decrypted": null
-  },
-  {
-    "timestamp": "2025-08-28T11:47:37.399280+00:00",
-    "encrypted": {
-      "gAAAAABosEHZECvsro_dgvSM5mQrHWMFZxBtkgvndruwF6R-sli-Biy8J3rfYe3a3YF2uKtJoeugZKrXumNBqbtsaqmB3z1DZA==": "gAAAAABosEHZ5w4n5eRenNuAicJEXhJbYZSx8aS4srV9VrOnzVYVKuT98tyqkN4AcliK3EE97hvXfVtdRta05thMqo5S0Dev_Q==",
-      "gAAAAABosEHZdorhdCv-ozziERILxGjjkcqEcAOgxrMWAgUKtQdsxbBF-ueX_n_WN1waBnKx2-bzUZ1ylcL52AIgl2hlxKgZvw==": "gAAAAABosEHZyVAVtvFH_14nsI6vjFNYA1p2LWA31jEJPgTks3dsBqOtXiqvtiS7SLcYFzAXZ5tFcP8jPmjbrJ_CTz02_4CA9Q==",
-      "gAAAAABosEHZPtktcsXwxNYCvfo0yagq0cePeO9trOuDI67mBjU8zGxJJjFHuD7ohhBx2B0imf4xoEIYJsMwF7dvXGQPYrr0gQ==": "gAAAAABosEHZ-oKRzrvMLrKHcPidRcyaQ6iBduEAXMUpjIN7A-nFCyr9-7gG4UlGwWvGc8nU222aqiOfMJsOy-6Vzc6zDlYB-A==",
-      "gAAAAABosEHZAzmvjvIxOCeFMTaCIqM_bBFbNfJY2ABn0mA1YlyKQTS2NOQ1iz1ZW9gqlD4UH8IvEM-JDcQwCOrQy_swv8Vzag==": "gAAAAABosEHZ6agufu6xQ9UFeJXLzwCR18eP0imWUqrzy6BLmXP1gh89l_4zU2gevVkoYJAoaDAPSLRXc16ms7W7URrXLtkm7g==",
-      "gAAAAABosEHZb_nCrekFLbhmKY7XjW3-g_9RCSpN0vWkfCpTY0h4WOPPusd-fPLE6X9WZv4n0F0rwzgXeCQ-MRySaP03YIBlMQ==": "gAAAAABosEHZAR-c-8NQ7lwSv2l6grHF4AP0kMyFUrLK37-TTe6o36cYcRn0IBnjBOrztIaPJA-Y7jeOQbIkcZigRX3zmIbb4Q==",
-      "gAAAAABosEHZtOqR53fhMaPM-JIaeAS7ps4dj7EW0pamMzJDWCtIgGPi2Bl8CnMcrSGZ7y6adofhVr5xW8NiyaeIGmKTVXgtvw==": "gAAAAABosEHZ7r3ZAplCuF1EUz5c8iAtNWBu561FKvFrXhzj6teR1JIhdw8Mem35Z4k79JGy4FQeJ2Ac5mo11Ji8nfsSn8GXsA==",
-      "gAAAAABosEHZlHp6t_dSrOEiugFhCbUw9Ay3Zl7ysl9_b4m5qPp0t_wxYZYmpONYQ_CnZWFFuw2Lgx0-gJEHJWrj_jhdofmyXw==": "gAAAAABosEHZJP5Dglu272daG1ieP4NoUanqacocO4UXXRzmqUP5V2nOPD60Z3mcM7aVteTsKmOMiyyTzNEOX5e1DlCPorXWQA==",
-      "gAAAAABosEHZrT6fSF6TikrOES_FKPDLsD1hb9fHthmYGBUv4ghtV30oIldd5S3nG7eQCTLTC8LgrF8Vh5XmL2mUlYmS32meqg==": "gAAAAABosEHZ6FKVUblHH_wFVSZbe-l-ufdgpEW68p56NFOyEGwFMXIkR3r7S8NUWTlZj9nZi2oPc1cn45wPX7Vsn-dJPY2SOaXHESWHe767JeftsOB2kvagyZ8P4dxgpPNcmqTMYXsT",
-      "gAAAAABosEHZASvAT8GCo7wZhdSGn4eT1PQswWj028ZrZcxqxJZX7oodngCSVbe3XUboHsK6WDZm6WExni6UYKlZUNl_XEnTAQ==": "gAAAAABosEHZvTkeFeILl-XBTsoDZVLwVCtuqGRICsV6NfBnNWJeZZulSYkbbHqXMs3gUNJ9ohWq5bn-UL39AYOduWVBUPr-GeDXK_1bOjhD6SFngGr_37pk9snXIZnswLHB2uwmi39A"
-    },
-    "decrypted": {
-      "action": "transfer",
-      "amount": 1000,
-      "currency": "$",
-      "from_account": "42000",
-      "to_account": "60000",
-      "policy": "\u226410000",
-      "role": "TellerAgent",
-      "epoch": "2025-08-28T11:47:37.380317+00:00",
-      "raw_instruction": "transfer $1000 from 42000 to 60000"
-    }
   }
 ]

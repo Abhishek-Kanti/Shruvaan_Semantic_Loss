@@ -1,6 +1,6 @@
 [
   {
-    "timestamp": "2025-08-28T11:47:37.380317+00:00",
+    "timestamp": "2025-08-30T11:51:11.104277+00:00",
     "component": "Prompter",
     "event": "Normalize",
     "details": {
@@ -13,74 +13,74 @@
         "to_account": "60000",
         "policy": "\u226410000",
         "role": "TellerAgent",
-        "epoch": "2025-08-28T11:47:37.380317+00:00",
+        "epoch": "2025-08-30T11:51:11.104277+00:00",
         "raw_instruction": "transfer $1000 from 42000 to 60000"
       }
     },
     "prev_hash": null,
-    "hash": "2108b6a880e766d8113445fcfc2798940ab341e721fbd37b702057df0a2ce043"
+    "hash": "d0000880052fd282c89a7aee0f98e07e2ce73e66533d5bcd4cc97ab45a1101d4"
   },
   {
-    "timestamp": "2025-08-28T11:47:37.397281+00:00",
+    "timestamp": "2025-08-30T11:51:11.351013+00:00",
     "component": "Cryptor",
     "event": "Encrypt",
     "details": {
       "hctx": "627410c36be684e6bcbab420961fca895f03ad16ec856422cd3258483c5afee0",
-      "salt": "46459244763b303508fcd9d759226f885f410dfb72fe2f2e5291231a7a18ce49",
+      "salt": "daefd78b15f17340a5a4cd79e509fc42fe36c7f65e8bc8397903fd4616b81372",
       "role": "TellerAgent",
-      "epoch": "2025-08-28T11:47:37.380317+00:00",
+      "epoch": "2025-08-30T11:51:11.104277+00:00",
       "shape": "dict:9"
     },
-    "prev_hash": "2108b6a880e766d8113445fcfc2798940ab341e721fbd37b702057df0a2ce043",
-    "hash": "3e60facf71314f2dc108e81c0eb63cb077095773ff2c5c7455e7d84a693b80e7"
+    "prev_hash": "d0000880052fd282c89a7aee0f98e07e2ce73e66533d5bcd4cc97ab45a1101d4",
+    "hash": "30b508c0f3e7caed0cd3c5bb351a63a1e7a1629105bbfbaac047db65ab03e21f"
   },
   {
-    "timestamp": "2025-08-28T11:47:37.412314+00:00",
+    "timestamp": "2025-08-30T11:51:11.387411+00:00",
     "component": "Decryptor",
     "event": "Decrypt",
     "details": {
       "role": "TellerAgent",
-      "epoch": "2025-08-28T11:47:37.380317+00:00",
+      "epoch": "2025-08-30T11:51:11.104277+00:00",
       "ok": true,
       "field_count": 9
     },
-    "prev_hash": "3e60facf71314f2dc108e81c0eb63cb077095773ff2c5c7455e7d84a693b80e7",
-    "hash": "1bded1f5dd73f888858aec7bce0f47e592126d580eef3103629511cef85310c7"
+    "prev_hash": "30b508c0f3e7caed0cd3c5bb351a63a1e7a1629105bbfbaac047db65ab03e21f",
+    "hash": "a9dacf6f8e638aa179c0a01a7332633d0ce1924e67832d28382fd2315cba013d"
   },
   {
-    "timestamp": "2025-08-28T11:47:39.309911+00:00",
+    "timestamp": "2025-08-30T11:51:15.919086+00:00",
     "component": "Mimicus",
     "event": "LLMRawResponse",
     "details": {
-      "raw": "```json\n{\"action\": \"transfer\", \"amount\": 8000, \"currency\": \"$\", \"from_account\": \"12389\", \"to_account\": \"57986\", \"policy\": \"\\u226410000\", \"role\": \"TellerAgent\", \"epoch\": \"2025-08-28T11:47:37.380317+00:00\", \"raw_instruction\": \"transfer $8000 from 12389 to 57986\"}\n```"
+      "raw": "```json\n{\"action\": \"transfer\", \"amount\": 8000, \"currency\": \"$\", \"from_account\": \"12389\", \"to_account\": \"57986\", \"policy\": \"\\u226410000\", \"role\": \"TellerAgent\", \"epoch\": \"2025-08-30T11:51:11.104277+00:00\", \"raw_instruction\": \"transfer $8000 from 12389 to 57986\"}\n```"
     },
-    "prev_hash": "1bded1f5dd73f888858aec7bce0f47e592126d580eef3103629511cef85310c7",
-    "hash": "0a1664f72f0481fbf5a937cc65045f0552716a3e69ceeb06128d4fecc66916ff"
+    "prev_hash": "a9dacf6f8e638aa179c0a01a7332633d0ce1924e67832d28382fd2315cba013d",
+    "hash": "c077fcd07618717e729674e074a264c10e6777ed49b787a72adce503f85e5cdb"
   },
   {
-    "timestamp": "2025-08-28T11:47:39.860152+00:00",
+    "timestamp": "2025-08-30T11:51:23.736702+00:00",
     "component": "Mimicus",
     "event": "Probe",
     "details": {
       "encrypted_snapshot": {
         "enc_map": {
-          "gAAAAABosEHZECvsro_dgvSM5mQrHWMFZxBtkgvndruwF6R-sli-Biy8J3rfYe3a3YF2uKtJoeugZKrXumNBqbtsaqmB3z1DZA==": "gAAAAABosEHZ5w4n5eRenNuAicJEXhJbYZSx8aS4srV9VrOnzVYVKuT98tyqkN4AcliK3EE97hvXfVtdRta05thMqo5S0Dev_Q==",
-          "gAAAAABosEHZdorhdCv-ozziERILxGjjkcqEcAOgxrMWAgUKtQdsxbBF-ueX_n_WN1waBnKx2-bzUZ1ylcL52AIgl2hlxKgZvw==": "gAAAAABosEHZyVAVtvFH_14nsI6vjFNYA1p2LWA31jEJPgTks3dsBqOtXiqvtiS7SLcYFzAXZ5tFcP8jPmjbrJ_CTz02_4CA9Q==",
-          "gAAAAABosEHZPtktcsXwxNYCvfo0yagq0cePeO9trOuDI67mBjU8zGxJJjFHuD7ohhBx2B0imf4xoEIYJsMwF7dvXGQPYrr0gQ==": "gAAAAABosEHZ-oKRzrvMLrKHcPidRcyaQ6iBduEAXMUpjIN7A-nFCyr9-7gG4UlGwWvGc8nU222aqiOfMJsOy-6Vzc6zDlYB-A==",
-          "gAAAAABosEHZAzmvjvIxOCeFMTaCIqM_bBFbNfJY2ABn0mA1YlyKQTS2NOQ1iz1ZW9gqlD4UH8IvEM-JDcQwCOrQy_swv8Vzag==": "gAAAAABosEHZ6agufu6xQ9UFeJXLzwCR18eP0imWUqrzy6BLmXP1gh89l_4zU2gevVkoYJAoaDAPSLRXc16ms7W7URrXLtkm7g==",
-          "gAAAAABosEHZb_nCrekFLbhmKY7XjW3-g_9RCSpN0vWkfCpTY0h4WOPPusd-fPLE6X9WZv4n0F0rwzgXeCQ-MRySaP03YIBlMQ==": "gAAAAABosEHZAR-c-8NQ7lwSv2l6grHF4AP0kMyFUrLK37-TTe6o36cYcRn0IBnjBOrztIaPJA-Y7jeOQbIkcZigRX3zmIbb4Q==",
-          "gAAAAABosEHZtOqR53fhMaPM-JIaeAS7ps4dj7EW0pamMzJDWCtIgGPi2Bl8CnMcrSGZ7y6adofhVr5xW8NiyaeIGmKTVXgtvw==": "gAAAAABosEHZ7r3ZAplCuF1EUz5c8iAtNWBu561FKvFrXhzj6teR1JIhdw8Mem35Z4k79JGy4FQeJ2Ac5mo11Ji8nfsSn8GXsA==",
-          "gAAAAABosEHZlHp6t_dSrOEiugFhCbUw9Ay3Zl7ysl9_b4m5qPp0t_wxYZYmpONYQ_CnZWFFuw2Lgx0-gJEHJWrj_jhdofmyXw==": "gAAAAABosEHZJP5Dglu272daG1ieP4NoUanqacocO4UXXRzmqUP5V2nOPD60Z3mcM7aVteTsKmOMiyyTzNEOX5e1DlCPorXWQA==",
-          "gAAAAABosEHZrT6fSF6TikrOES_FKPDLsD1hb9fHthmYGBUv4ghtV30oIldd5S3nG7eQCTLTC8LgrF8Vh5XmL2mUlYmS32meqg==": "gAAAAABosEHZ6FKVUblHH_wFVSZbe-l-ufdgpEW68p56NFOyEGwFMXIkR3r7S8NUWTlZj9nZi2oPc1cn45wPX7Vsn-dJPY2SOaXHESWHe767JeftsOB2kvagyZ8P4dxgpPNcmqTMYXsT",
-          "gAAAAABosEHZASvAT8GCo7wZhdSGn4eT1PQswWj028ZrZcxqxJZX7oodngCSVbe3XUboHsK6WDZm6WExni6UYKlZUNl_XEnTAQ==": "gAAAAABosEHZvTkeFeILl-XBTsoDZVLwVCtuqGRICsV6NfBnNWJeZZulSYkbbHqXMs3gUNJ9ohWq5bn-UL39AYOduWVBUPr-GeDXK_1bOjhD6SFngGr_37pk9snXIZnswLHB2uwmi39A"
+          "gAAAAABosuWvzOeOMOrlEDe8OqHovKvXkDqvO7KF7dgQd8KqEbVSGl_aEyazRtvg4Ff25ffqEJMdORDv1Y5F_OC9HMJbRELZ2A==": "gAAAAABosuWv6uZTiNkqQ1SjuY3Yh-weD2eGcoq0HWkKVSq-GJqvf_kuVASWnY15CxKPcCRh9P6vY4dZE66X-pLtjAagYxuNrA==",
+          "gAAAAABosuWvoQTnWjlZhZ1UHE1O2nwm15ha1vft1EJyEBnLC46z7OYQiC6R4E-d-7DAqcxX6mLI-B81Dtpau-7d7Je5Y7MGUQ==": "gAAAAABosuWvhVi9CJrB1EH0IqqPbfRsa3FXVWw4JlYXYIGx6seGh-gOcEYuHLat1JIvNlc13khxxrkGhf995Sl3RY1bGx_8cg==",
+          "gAAAAABosuWv53L_eijIrobXqDnRLEGcagaM-Pzgsd_9NgqzW-6fa1ogviBUbh2aqovOCrtd0gHpmDLHGo4ktEIauU97xBC_LA==": "gAAAAABosuWvhH1Baz8NNjOHp4KSJTd6nn9hQqrVwZhSZusW-TZ2kPfoAHbCihsYb_mfHMTSXtnsI5EF54RMM-fVsiKQ3ar-nQ==",
+          "gAAAAABosuWvN8wp9ZXULzmdhfhHbmLKvUrsJ8HwlAtECJ1X8x360Pu1nNDFNzPa4h_O0a0C3B7VKLi47G9FPcWCo1bqASIHxg==": "gAAAAABosuWvrKhIHVnM6qphozaa0DODOJdiDUCr5sZ7jsrNAHQKGx4a8umt3ePpRdIaufcCuyhifIZ51JdqcqQyFtWho7r76Q==",
+          "gAAAAABosuWvksrwjgtAfi8zwNPnSedO1RsXFGj5DlTTBoBH3A3cIU973vmeZ21wzux4sYhlp-ticnLVRkU6PWfXiSIhCqyl1g==": "gAAAAABosuWvOH63hc6g1BWbMN8GID7FaYS895k32_48H-6WkGASTsbpSFB9sGyPlCj7Zq3ExadR-KZgvJpBepjyeQtvIWwwwQ==",
+          "gAAAAABosuWvnLDNGA3k1Bdfg9jUma8mZYEGR6ky5n2dI4H6zCO69z-CrcEMpBN2bwpKMiE46zH_i5IwL370nE0yvwI8OXcHBg==": "gAAAAABosuWv5Mtf5bKlagrYxmOv_nESZFWCFNyRhgD1yNWatR86zOt9AkXSjTKlG0Us4ipE6ppkzHqyXyt89sfClS593fR5sQ==",
+          "gAAAAABosuWvMnO9S5AUqKMerCCIOLtoL_mpeXx5YJGCDZm_LxBckWuP-JiQ8bbZYfPKvU0lrrxXd6uqz5hkWvTlQHUYYBKXuA==": "gAAAAABosuWv8kPNadbklpqVEhr3x46xyADF5E_Z59OGN4Ms6zeLC_tPDKlqkQZ57lcQgqDJASRS-xQ7WnQ9VXcnzUcVYL4m1Q==",
+          "gAAAAABosuWvTcCAST6jT9vwZN0BcSrl6ru3imyN7YP7kO9E8fdcJx26IGvEMCT9Trv1EC8iB5RFpmo0ctHwmxO8Cldol_Gpow==": "gAAAAABosuWva3Cv9iYShHnYj09ZcTGspWVICjkXT5bAzqYmEWPTaVndODjE9iHX-kUpVZDYQulwvfR7SVacWos-Gxq4of2S8JsETbbzxobAgml1_V8DAjU8IWNyw8IVd4TNYgKnuiOd",
+          "gAAAAABosuWvEkX9rnxDvNCgD9cQIvdCkCTAbpcJRQrAh3rJTkM3TDNUZ4cciwVUzFOafI7cM1Qsg5eHb-QcMy6zJCn01VGVzg==": "gAAAAABosuWvGbO06ivKivydAlCDsV7C309HL_g53GEUReiqgQjexJhBXKxKbWkR0DUFyfxAa9X0Nz7pRvKb5CThdQFkhV_OxvpGzc2zdn87Hg1FqpbkJPommV33thTR97tpvL1XTx06"
         },
-        "pop": "bcb30523aaf8c299b1f6cd5ba96373c618e0d72431e29ddc5a46f8be6f0be21d",
+        "pop": "085a7dc71f6ea043fa6f874c7515a7087e53d681c0574eb9b75a8eea4873fd8f",
         "metadata": {
           "role": "TellerAgent",
-          "epoch": "2025-08-28T11:47:37.380317+00:00",
+          "epoch": "2025-08-30T11:51:11.104277+00:00",
           "kdf": {
             "hctx": "627410c36be684e6bcbab420961fca895f03ad16ec856422cd3258483c5afee0",
-            "salt": "46459244763b303508fcd9d759226f885f410dfb72fe2f2e5291231a7a18ce49"
+            "salt": "daefd78b15f17340a5a4cd79e509fc42fe36c7f65e8bc8397903fd4616b81372"
           }
         }
       },
@@ -93,19 +93,24 @@
           "to_account": "57986"
         },
         "auth_grade": "TellerAgent",
-        "time_issued": "2025-08-28T11:47:37.380317+00:00",
+        "time_issued": "2025-08-30T11:51:11.104277+00:00",
         "exec_status": "queued"
       },
       "components": {
         "entity_recovery": 0.5454545454545454,
         "structural_fidelity": 1.0,
-        "semantic_drift": 0.5,
-        "leakage_score": 0.5181818181818182
+        "semantic_drift": 0.969592273235321,
+        "leakage_score": 0.4242633635347539,
+        "entailment_prob": 0.01933874376118183,
+        "neutral_prob": 0.011068962514400482,
+        "contradiction_prob": 0.969592273235321,
+        "nli_entropy": 0.15609475882894086,
+        "method": "bart-mnli"
       },
-      "leakage_score": 0.5181818181818182,
+      "leakage_score": 0.4242633635347539,
       "decision": "ok"
     },
-    "prev_hash": "0a1664f72f0481fbf5a937cc65045f0552716a3e69ceeb06128d4fecc66916ff",
-    "hash": "531793bc8d0c9a938c29c4b4ac36320478334e06fc6042b3114805428aa86057"
+    "prev_hash": "c077fcd07618717e729674e074a264c10e6777ed49b787a72adce503f85e5cdb",
+    "hash": "856b093c8041634434cd049c7f665ff165115241d99ea2cc3c405a3acd0d4cbf"
   }
 ]

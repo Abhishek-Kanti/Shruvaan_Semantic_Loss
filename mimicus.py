@@ -1,10 +1,13 @@
 import json
 from typing import Any, Dict, Optional, Tuple
 import os
+import math
 
 import google.generativeai as genai
 from audit_logger import AuditLogger
 from crypto_history_logger import CryptoHistoryLogger
+
+from transformers import pipeline
 
 
 class LeakageScoreCalculator:
@@ -14,7 +17,7 @@ class LeakageScoreCalculator:
 
     E: Entity Recovery (slot accuracy, weighted)
     S: Structural Fidelity (schema overlap)
-    Δ: Semantic Drift (NLI-based contradiction score)
+    Δ: Semantic Drift (NLI-based score: contradiction prob or fallback LLM drift)
     """
 
     def __init__(self, model, alpha: float = 0.4, beta: float = 0.4, gamma: float = 0.2):
@@ -22,6 +25,12 @@ class LeakageScoreCalculator:
         self.beta = beta
         self.gamma = gamma
         self.model = model
+
+        # Load HuggingFace NLI model once
+        try:
+            self.nli_model = pipeline("text-classification", model="facebook/bart-large-mnli")
+        except Exception:
+            self.nli_model = None
 
         # weight important entities
         self.entity_weights = {
@@ -39,20 +48,19 @@ class LeakageScoreCalculator:
     def calculate(self, original: Dict[str, Any], mimic_fields: Dict[str, Any]) -> Tuple[float, Dict[str, float]]:
         E = self._entity_recovery(original, mimic_fields)
         S = self._structural_fidelity(original, mimic_fields)
-        D = self._semantic_drift(original, mimic_fields)
+        D, nli_metrics = self._semantic_drift(original, mimic_fields)
         L = self.alpha * E + self.beta * S - self.gamma * D
+
         return max(0.0, min(1.0, L)), {
             "entity_recovery": E,
             "structural_fidelity": S,
             "semantic_drift": D,
             "leakage_score": L,
+            **nli_metrics  # include detailed NLI metrics
         }
 
     # --- Components ---
     def _entity_recovery(self, original, mimic) -> float:
-        """
-        Weighted slot-level recovery.
-        """
         total_w, hit_w = 0.0, 0.0
         orig_entities = self._flatten_entities(original)
         mimic_entities = self._flatten_entities(mimic)
@@ -65,9 +73,6 @@ class LeakageScoreCalculator:
         return hit_w / total_w if total_w else 0.0
 
     def _structural_fidelity(self, original, mimic) -> float:
-        """
-        Schema overlap: Jaccard of field keys.
-        """
         orig_keys = set(self._flatten_entities(original).keys())
         mimic_keys = set(self._flatten_entities(mimic).keys())
         if not orig_keys or not mimic_keys:
@@ -75,39 +80,76 @@ class LeakageScoreCalculator:
         overlap = len(orig_keys & mimic_keys) / len(orig_keys | mimic_keys)
         return float(overlap)
 
-    def _semantic_drift(self, original, mimic) -> float:
+    def _semantic_drift(self, original, mimic) -> Tuple[float, Dict[str, float]]:
         """
-        Semantic drift via NLI (entailment vs contradiction).
-        Returns [0,1]: 0 = perfect entailment, 1 = full contradiction.
+        Semantic drift via NLI.
+        Primary: BART-MNLI probabilities.
+        Fallback: LLM regression drift scoring.
         """
         orig_text = json.dumps(original, default=str)
         mimic_text = json.dumps(mimic, default=str)
 
-        prompt = (
-            "You are an NLI model. Compare the two JSON payloads.\n"
-            f"Reference (true canonical): {orig_text}\n"
-            f"Candidate (mimic): {mimic_text}\n\n"
-            "Answer strictly as one word: entailment, neutral, or contradiction."
-        )
+        if self.nli_model:
+            try:
+                results = self.nli_model(f"{orig_text} </s></s> {mimic_text}", return_all_scores=True)[0]
+                probs = {r["label"].lower(): r["score"] for r in results}
 
+                entail = probs.get("entailment", 0.0)
+                neutral = probs.get("neutral", 0.0)
+                contra = probs.get("contradiction", 0.0)
+
+                entropy = -sum(p * math.log(p + 1e-10) for p in [entail, neutral, contra])
+
+                drift = contra  # contradiction probability as main drift
+
+                metrics = {
+                    "entailment_prob": entail,
+                    "neutral_prob": neutral,
+                    "contradiction_prob": contra,
+                    "nli_entropy": entropy,
+                    "method": "bart-mnli"
+                }
+                return drift, metrics
+
+            except Exception:
+                pass
+
+        # --- Fallback LLM regression scoring ---
+        drift_score = self._perform_nli_semantic_assessment(orig_text, mimic_text)
+        print(f"LLM-based drift score (fallback): {drift_score:.3f}")
+        return drift_score, {"drift_fallback": drift_score, "method": "llm-fallback"}
+
+    def _perform_nli_semantic_assessment(self, original_text: str, mimic_text: str) -> float:
+        """
+        Fallback: use LLM to assign drift score directly 0.0–1.0.
+        """
+        prompt = f"""
+Compare the semantic meaning and consistency between these two data descriptions:
+
+ORIGINAL DATA:
+{original_text}
+
+MIMIC DATA:
+{mimic_text}
+
+Using natural language inference, determine how much semantic drift exists between these descriptions. 
+
+Respond with only a number between 0.0 and 1.0 where:
+0.0 = identical meaning
+0.25 = minor differences
+0.5 = moderate drift
+0.75 = major differences
+1.0 = completely different
+"""
         try:
             resp = self.model.generate_content(prompt)
-            verdict = resp.text.strip().lower()
+            drift_str = resp.text.strip()
+            drift_val = float(drift_str)
+            return min(max(drift_val, 0.0), 1.0)
         except Exception:
             return 0.5  # fallback
 
-        if "contradiction" in verdict:
-            return 1.0
-        elif "neutral" in verdict:
-            return 0.5
-        elif "entailment" in verdict:
-            return 0.0
-        return 0.5  # unknown fallback
-
     def _flatten_entities(self, payload):
-        """
-        Flatten into slot:value dict for comparison.
-        """
         out = {}
         if not isinstance(payload, dict):
             return out
@@ -135,14 +177,13 @@ class Mimicus:
                  api_key: Optional[str] = None):
         self.logger = logger or AuditLogger()
         self.history_logger = history_logger or CryptoHistoryLogger()
-        
+
         api_key = api_key or os.getenv("GEMINI_API_KEY")
         if not api_key:
             raise ValueError("Gemini API key not set.")
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel("gemini-1.5-flash")
 
-        # pass model to calculator for NLI use
         self.calc = LeakageScoreCalculator(self.model, alpha, beta, gamma)
         self.leak_warn_threshold = leak_warn_threshold
 
@@ -163,7 +204,7 @@ class Mimicus:
     def _llm_mimic(self, current_enc: Dict[str, Any]) -> Dict[str, Any]:
         history = self.history_logger.load_recent(n=10)
         if history:
-            history = history[:-1]  # drop current pair
+            history = history[:-1]
 
         filtered_history = [
             pair for pair in history
@@ -200,8 +241,8 @@ class Mimicus:
                 raw = raw[4:].strip()
 
         try:
-            mimic_dict = json.loads(raw)              # Step 1: Parse
-            refined_mimic = self._canonicalize(mimic_dict)  # Step 2: Canonicalize
+            mimic_dict = json.loads(raw)
+            refined_mimic = self._canonicalize(mimic_dict)
             return refined_mimic
         except Exception:
             self.logger.log("Mimicus", "ParseError", {"raw": raw})
@@ -236,5 +277,3 @@ class Mimicus:
 
 def run_mimicus(decrypted_message, encrypted_message, logger=None, history_logger=None):
     return Mimicus(logger=logger, history_logger=history_logger).probe(decrypted_message, encrypted_message)
-
-
