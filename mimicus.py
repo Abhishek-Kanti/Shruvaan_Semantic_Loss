@@ -8,6 +8,8 @@ from audit_logger import AuditLogger
 from crypto_history_logger import CryptoHistoryLogger
 
 from transformers import pipeline
+import torch
+import logging
 
 
 class LeakageScoreCalculator:
@@ -26,11 +28,22 @@ class LeakageScoreCalculator:
         self.gamma = gamma
         self.model = model
 
-        # Load HuggingFace NLI model once
+        # Detect device (GPU if available, else CPU)
+        device = 0 if torch.cuda.is_available() else -1
+        device_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU"
+
         try:
-            self.nli_model = pipeline("text-classification", model="facebook/bart-large-mnli")
-        except Exception:
+            # Load HuggingFace NLI model once
+            self.nli_model = pipeline(
+                "text-classification",
+                model="facebook/bart-large-mnli",
+                device=device,
+                top_k=None
+            )
+            print(f"[Mimicus] NLI model loaded on {device_name}")  # direct console print
+        except Exception as e:
             self.nli_model = None
+            print(f"[Mimicus] Failed to load NLI model: {e}")
 
         # weight important entities
         self.entity_weights = {
