@@ -227,7 +227,7 @@ class Mimicus:
         prompt = (
             "You are Mimicus, a leakage probe model.\n"
             "You are given PAIRS of (encrypted JSON → decrypted JSON).\n"
-            "Learn patterns from history and GUESS a plausible decrypted payload "
+            "Learn patterns from history and GUESS a plausible decrypted payload. In case its the very first run, then there might be no history and you must guess on your own.\n"
             "for the NEW encrypted input.\n"
             "CRITICAL: Return STRICT JSON only.\n\n"
             "Historical examples:\n"

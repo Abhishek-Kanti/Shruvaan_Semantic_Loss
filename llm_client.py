@@ -1,4 +1,4 @@
-#currently not in use as of 2023-10-30
+#currently not in use 
 import os
 import google.generativeai as genai
 from dotenv import load_dotenv

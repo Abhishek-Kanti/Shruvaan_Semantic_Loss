@@ -7,6 +7,7 @@ import os
 from dotenv import load_dotenv
 import json
 from crypto_history_logger import CryptoHistoryLogger
+from probator import run_probator
 
 # === Setup ===
 load_dotenv()
@@ -20,7 +21,7 @@ c = Cryptor(logger=logger, history_logger=history_logger)
 d = Decryptor(logger=logger, history_logger=history_logger)
 
 print("\n=== Instruction ===")
-instruction = "transfer $1000 from 42000 to 60000"
+instruction = "transfer $1000 from 7395-8845-2291 to 1559-6623-4401"
 print(f"Instruction: {instruction}")
 
 # 1. Normalize
@@ -51,7 +52,17 @@ print(json.dumps(mimic_result["components"], indent=2))
 print(f"\nLeakage Score: {mimic_result['leakage_score']:.3f}")
 print(f"Decision: {mimic_result['decision']}")
 
+# 5. Run Probator probe on decrypted + encrypted output
+print("\n=== Running Probator Probe ===")
+probator_result = run_probator(recovered, packet, logger=logger)
+
+print("\nStatistical Leakage Components:")
+print(json.dumps(probator_result, indent=2))
+
+print(f"\nRprob (overall statistical leakage score): {probator_result['Rprob']:.3f}")
+
 # === Export unified log ===
 print("\n=== Export unified log ===")
 logger.export("audit_log.json")
 print("Unified audit log exported → audit_log.json")
+

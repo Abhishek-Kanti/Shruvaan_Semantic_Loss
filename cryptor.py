@@ -91,10 +91,7 @@ class Cryptor:
 
         packet = {"enc_map": enc_map, "pop": pop, "metadata": metadata}
 
-        # 7. Log encrypted side for history (no plaintext yet)
-        self.history_logger.log_pair(packet, None)
-
-        # 8. Audit
+        # 7. Audit
         self.logger.log(
             component="Cryptor",
             event="Encrypt",
