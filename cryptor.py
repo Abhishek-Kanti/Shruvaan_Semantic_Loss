@@ -10,8 +10,8 @@ JsonObj = Union[Dict[str, Any], List[Any], str, int, float, bool, None]
 
 class Cryptor:
     """
-    Per-field JSON crypter:
-    - Derives a Fernet key via HKP (hctx + salt)
+    Per-field JSON crypter with adaptive theta support:
+    - Derives a Fernet key via HKP (hctx + salt, optionally modulated by theta)
     - Encrypts every key and every leaf value (type preserved via JSON-encode)
     - Preserves JSON structure (dict/list)
     - Emits enc_map + PoP + metadata
@@ -19,18 +19,43 @@ class Cryptor:
 
     def __init__(self, logger: Optional[AuditLogger] = None,
                  include_kdf_hints: bool = True,
-                 history_logger: Optional[CryptoHistoryLogger] = None):
+                 history_logger: Optional[CryptoHistoryLogger] = None,
+                 theta: Optional[List[float]] = None):
         self.logger = logger or AuditLogger()
         self.include_kdf_hints = include_kdf_hints
         self.history_logger = history_logger   # shared logger injected here
+
+        # θ parameters (adaptive encryption knobs)
+        self.theta = theta or None
+
+    # ----- Theta management --------------------------------------------------
+
+    def set_theta(self, theta: List[float]):
+        """Set encryption control parameters θ (from Preceptor)."""
+        self.theta = theta
+
+    def get_theta(self) -> Optional[List[float]]:
+        """Return current θ vector (if any)."""
+        return self.theta
 
     # ----- HKP / helpers -----------------------------------------------------
 
     def _hash_hex(self, s: str) -> str:
         return hashlib.sha256(s.encode("utf-8")).hexdigest()
 
+    def _apply_theta(self, hctx_hex: str, salt_hex: str) -> str:
+        """
+        Mix theta into the HKP material. Keeps backward compatibility if theta=None.
+        """
+        if self.theta is None:
+            return hctx_hex + salt_hex
+
+        # Simple modulation: mix theta values into string
+        theta_str = ",".join([f"{t:.4f}" for t in self.theta])
+        return hctx_hex + salt_hex + theta_str
+
     def _hkp_key_bytes(self, hctx_hex: str, salt_hex: str) -> bytes:
-        material = (hctx_hex + salt_hex).encode("utf-8")
+        material = self._apply_theta(hctx_hex, salt_hex).encode("utf-8")
         return hashlib.sha256(material).digest()  # 32 bytes
 
     def _to_canonical(self, payload: Dict[str, Any]) -> str:
@@ -70,7 +95,7 @@ class Cryptor:
         hctx_hex = self._hash_hex(raw_instruction)
         salt_hex = self._hash_hex(role + policy + epoch)
 
-        # 2. Fernet key
+        # 2. Fernet key (now possibly modulated by θ)
         hkp_key_bytes = self._hkp_key_bytes(hctx_hex, salt_hex)
         fernet_key = base64.urlsafe_b64encode(hkp_key_bytes)
         cipher = Fernet(fernet_key)
@@ -88,6 +113,8 @@ class Cryptor:
         metadata = {"role": role, "epoch": epoch}
         if self.include_kdf_hints:
             metadata["kdf"] = {"hctx": hctx_hex, "salt": salt_hex}
+        if self.theta is not None:
+            metadata["theta"] = self.theta  # track applied theta for audit
 
         packet = {"enc_map": enc_map, "pop": pop, "metadata": metadata}
 
@@ -100,11 +127,9 @@ class Cryptor:
                 "salt": salt_hex if self.include_kdf_hints else "<hidden>",
                 "role": role,
                 "epoch": epoch,
+                "theta": self.theta if self.theta else "<default>",
                 "shape": f"dict:{len(normalized_instruction)}",
             },
         )
 
         return packet
-
-
-

@@ -11,7 +11,7 @@ JsonObj = Union[Dict[str, Any], List[Any], str, int, float, bool, None]
 class Decryptor:
     """
     Inverse of Cryptor:
-    - Rebuild Fernet from HKP
+    - Rebuild Fernet from HKP (+ theta from AuditLogger if applied)
     - Decrypt every key and every leaf value
     - Restore original types via json.loads()
     - Verify PoP
@@ -25,8 +25,34 @@ class Decryptor:
     def _hash_hex(self, s: str) -> str:
         return hashlib.sha256(s.encode("utf-8")).hexdigest()
 
+    def _apply_theta(self, hctx_hex: str, salt_hex: str) -> str:
+        """
+        Mix theta into the HKP material. If none logged, return plain hctx+salt.
+        """
+        theta = None
+        if hasattr(self.logger, "get_theta_for_packet"):
+            theta = self.logger.get_theta_for_packet(hctx_hex, salt_hex)
+
+        if theta is None:
+            return hctx_hex + salt_hex
+
+        # --- Robust cleanup ---
+        theta_vals = []
+        for t in theta:
+            try:
+                theta_vals.append(float(t))
+            except Exception:
+                continue   # skip anything invalid like "<" or None
+
+        if not theta_vals:  # if cleanup failed, just ignore theta
+            return hctx_hex + salt_hex
+
+        theta_str = ",".join([f"{t:.4f}" for t in theta_vals])
+        return hctx_hex + salt_hex + theta_str
+    
+
     def _hkp_key_bytes(self, hctx_hex: str, salt_hex: str) -> bytes:
-        material = (hctx_hex + salt_hex).encode("utf-8")
+        material = self._apply_theta(hctx_hex, salt_hex).encode("utf-8")
         return hashlib.sha256(material).digest()
 
     def _to_canonical(self, payload: Dict[str, Any]) -> str:
@@ -49,9 +75,8 @@ class Decryptor:
         if isinstance(obj, str):
             try:
                 val = self._dec_str(cipher, obj)
-                # try to restore type
                 try:
-                    return json.loads(val)
+                    return json.loads(val)  # restore type if possible
                 except json.JSONDecodeError:
                     return val
             except InvalidToken:
@@ -77,6 +102,7 @@ class Decryptor:
         if not (hctx_hex and salt_hex):
             raise ValueError("Missing HKP KDF material")
 
+        # --- use theta-aware derivation ---
         fernet_key = base64.urlsafe_b64encode(self._hkp_key_bytes(hctx_hex, salt_hex))
         cipher = Fernet(fernet_key)
 
@@ -91,7 +117,8 @@ class Decryptor:
                 "expected": expected_pop, "got": pop, "role": role, "epoch": epoch
             })
             raise ValueError("PoP verification failed")
-        
+
+        # log into history (for Mimicus)
         self.history_logger.log_pair(packet["enc_map"], plaintext_obj)
 
         self.logger.log("Decryptor", "Decrypt", {
@@ -99,4 +126,3 @@ class Decryptor:
             "field_count": len(plaintext_obj)
         })
         return plaintext_obj
-

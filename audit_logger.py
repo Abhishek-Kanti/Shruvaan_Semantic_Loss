@@ -26,3 +26,19 @@ class AuditLogger:
     def export(self, filepath="audit_log.json"):
         with open(filepath, "w") as f:
             json.dump(self.logs, f, indent=2)
+
+    # ---- New helper ----
+    def get_theta_for_packet(self, hctx_hex=None, salt_hex=None):
+        """
+        Look through logs for the latest Cryptor->Encrypt entry matching hctx+salt,
+        and return the theta vector if present. Otherwise return None.
+        """
+        for entry in reversed(self.logs):
+            if entry["component"] == "Cryptor" and entry["event"] == "Encrypt":
+                det = entry.get("details", {})
+                if hctx_hex and det.get("hctx") != hctx_hex:
+                    continue
+                if salt_hex and det.get("salt") != salt_hex:
+                    continue
+                return det.get("theta")
+        return None
