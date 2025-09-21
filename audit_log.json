@@ -1,0 +1,183 @@
+[
+  {
+    "timestamp": "2025-09-20T18:13:04.186701+00:00",
+    "component": "Prompter",
+    "event": "Normalize",
+    "details": {
+      "raw_instruction": "transfer $1500 from 6395-8845-2791 to 6559-6423-4401",
+      "normalized": {
+        "action": "transfer",
+        "amount": 1500,
+        "currency": "$",
+        "from_account": "6395-8845-2791",
+        "to_account": "6559-6423-4401",
+        "policy": "\u226410000",
+        "role": "TellerAgent",
+        "epoch": "2025-09-20T18:13:04.186701+00:00",
+        "raw_instruction": "transfer $1500 from 6395-8845-2791 to 6559-6423-4401"
+      }
+    },
+    "prev_hash": null,
+    "hash": "b751dfb4c62c9f42133479176e71d96abc932da7da82fb7a85b0fcd5ef8658e1"
+  },
+  {
+    "timestamp": "2025-09-20T18:13:04.410558+00:00",
+    "component": "Cryptor",
+    "event": "Encrypt",
+    "details": {
+      "hctx": "d2ff17d1ffc96dd3e9a8ab43893ffd6e3b51b3579880f60c7b80d4c3eefc8c38",
+      "salt": "db55f47e6a98749484dd5a98c839e482acf598433aeb4f5373bd277a70f42da7",
+      "role": "TellerAgent",
+      "epoch": "2025-09-20T18:13:04.186701+00:00",
+      "theta": "<default>",
+      "shape": "dict:9"
+    },
+    "prev_hash": "b751dfb4c62c9f42133479176e71d96abc932da7da82fb7a85b0fcd5ef8658e1",
+    "hash": "7419051941969af22f5277f1e630ca07cb39f5688db4f98b960ef9e5059dc82b"
+  },
+  {
+    "timestamp": "2025-09-20T18:13:04.481600+00:00",
+    "component": "Decryptor",
+    "event": "Decrypt",
+    "details": {
+      "role": "TellerAgent",
+      "epoch": "2025-09-20T18:13:04.186701+00:00",
+      "ok": true,
+      "field_count": 9
+    },
+    "prev_hash": "7419051941969af22f5277f1e630ca07cb39f5688db4f98b960ef9e5059dc82b",
+    "hash": "0655d8ab4816acc1dc3463b795a9cd4508c1f04ce81e78c3154837e5eab372c1"
+  },
+  {
+    "timestamp": "2025-09-20T18:13:05.263833+00:00",
+    "component": "Praeceptor",
+    "event": "DecryptFail",
+    "details": {
+      "step": 0,
+      "error": "Decryptor.decrypt() got an unexpected keyword argument 'logging'"
+    },
+    "prev_hash": "0655d8ab4816acc1dc3463b795a9cd4508c1f04ce81e78c3154837e5eab372c1",
+    "hash": "6b215001dc931fff447f655db3d33230d94c17f60998f8a8e59aac2dc1ef854d"
+  },
+  {
+    "timestamp": "2025-09-20T18:13:05.268121+00:00",
+    "component": "Cryptor",
+    "event": "Encrypt",
+    "details": {
+      "hctx": "d2ff17d1ffc96dd3e9a8ab43893ffd6e3b51b3579880f60c7b80d4c3eefc8c38",
+      "salt": "db55f47e6a98749484dd5a98c839e482acf598433aeb4f5373bd277a70f42da7",
+      "role": "TellerAgent",
+      "epoch": "2025-09-20T18:13:04.186701+00:00",
+      "theta": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "shape": "dict:9"
+    },
+    "prev_hash": "6b215001dc931fff447f655db3d33230d94c17f60998f8a8e59aac2dc1ef854d",
+    "hash": "a02717415340743042bb8c15cb079e2ffc546e62b4101f25d46b7a07deb71ac0"
+  },
+  {
+    "timestamp": "2025-09-20T18:13:05.283175+00:00",
+    "component": "Decryptor",
+    "event": "Decrypt",
+    "details": {
+      "role": "TellerAgent",
+      "epoch": "2025-09-20T18:13:04.186701+00:00",
+      "ok": true,
+      "field_count": 9
+    },
+    "prev_hash": "a02717415340743042bb8c15cb079e2ffc546e62b4101f25d46b7a07deb71ac0",
+    "hash": "c906a562d6c5cef9f53eaf4ba603c991c1db614fcdc53643b0a555bdd2a38a07"
+  },
+  {
+    "timestamp": "2025-09-20T18:13:24.157957+00:00",
+    "component": "Mimicus",
+    "event": "LLMRawResponse",
+    "details": {
+      "raw": "```json\n{\"action\": \"transfer\", \"amount\": 1500, \"currency\": \"$\", \"from_account\": \"6395-8845-2791\", \"to_account\": \"6559-6423-4401\", \"policy\": \"\\u226410000\", \"role\": \"TellerAgent\", \"epoch\": \"2025-09-20T18:13:04.186701+00:00\", \"raw_instruction\": \"transfer $1500 from 6395-8845-2791 to 6559-6423-4401\"}\n``"
+    },
+    "prev_hash": "c906a562d6c5cef9f53eaf4ba603c991c1db614fcdc53643b0a555bdd2a38a07",
+    "hash": "6dde1018b3ee9a29d6a6d64c8f00481ee9659abcaf15cc8b9149a67acb7206f3"
+  },
+  {
+    "timestamp": "2025-09-20T18:13:29.501196+00:00",
+    "component": "Mimicus",
+    "event": "Probe",
+    "details": {
+      "encrypted_snapshot": {
+        "enc_map": {
+          "gAAAAABozu6xxfp4v-9G7drkCN_bwuxQJUR1emHY6XoG31s8fBfOrZQtQ328LjjymabfTnrjY66wMRBM9CWA2Sjy3KnftXqeWQ==": "gAAAAABozu6xp2fF_r3IVun-OEGK2CntnWfzzVUk9hgQInEjxIaWno7cbjVgCCbNIoHSuGdrWJJGwKWl5vKFyUidP1D9fXw2RA==",
+          "gAAAAABozu6xCxaW4j-MjuOfNrodu1DBfFqk2YiJOac5dQjg5sRoanGjpR7Vdh0PvCTQFtoZDQBKtShU6BDBFJwRVTJOU8b5zA==": "gAAAAABozu6xVwsglMhN9XbGr-O7X0y7OqDARdM0Go29BM2RGJEVgGvOlLjgdiKaLTVc5RrIC4MTuovjiXHea19UKrk5wfhRMA==",
+          "gAAAAABozu6xOdj3XAhQ8M1GjxW90MEqnuhWsV7Yjf5Pfnudmrf_EnQgEDiyunzVtX_mVvavJlliuCqWIWvA4pOmA8Nj5l36fw==": "gAAAAABozu6xYqhyjTl7A31y8bouhx0CKoREwURuLImeH966d6-Cp7p19cl1NlGDw4ajZnNZr5xO6Kf-1BooC2XXjFDcqkm_Cg==",
+          "gAAAAABozu6xkRh5zJVjqKLJHK2LGR44B1oXX-doAkgfosAx4arB4vvOM7mMMAojmWeiXEY9DNdQB9Q_3SjPCAA2UVyqHPu4yA==": "gAAAAABozu6x4H5zo7KL4GEy-P4fIut0ow4EOcnAcjcsAyu4FGQ3Ng9g3N3tCqMySQzv1GpC58xIgo50RIbVx7tXyhlsrU-ylnG1ZM-hyezKD8h0sCxMvNM=",
+          "gAAAAABozu6xCbx9cHsRMKsVkqZiY1Swmvo8hPmVEoookFL72ORDn0YMEExONotqA1NWl7QjIZ1sVPpD3HLHrOqy3KZFQmrcqw==": "gAAAAABozu6xG05tkI3fZ8rRwBaom-cf9COA61Br_jaH5Pi0Rfp_-m9YofzLwzI4aV9lEGTcYZspXiJMFjSYRLUwF-KJ56Mz8K63NErf5Z0DOyGSvINNBZs=",
+          "gAAAAABozu6x2tjNERg_50CTRPog97fNe2xW4ykxzTCQNBaIqrNwI6IxtB2-uask4B70OpO9bP6fXz5nweCd16Rp0_TF89hsHg==": "gAAAAABozu6xFhlSMETjFLSLNGw5LiwD1-gdJiV7gqV9O8mi-b2MUmldw5lDcsWcZYZARaatoP0fWd9cQtsGuNorYH4tuczYsQ==",
+          "gAAAAABozu6xZpU2ZajtsfMXxhGS5Bu5FmcNAvurOJedZZ7XH6SOHfoSF2n1wFYtN-eTDaRExGPa_eXKgvyHHR3wHFsaPbnNTA==": "gAAAAABozu6xYs3s0KbQejiVKLCjiwbQ7m9PNh8dZSRSw4sli29J8coLYoJ4JL9VJPZWJ7vOIlqKTiV_6iwIKU3-0lBJAjd-tA==",
+          "gAAAAABozu6x-fZJlOICfATIaVPkHgkpN47-GCNOcKfdB3qPFA7_t1iI2XlKJwqcxZPj4CU1S4vf0yKUweNZq1FhMXw0Xa6LXQ==": "gAAAAABozu6xunGCpawX2GG1R66uD8-9R9yQGlo9FjXxu3w6bfLyix7N7L9-7nW404XmS0PRmwWyoWCyOjGSAmfNGubEeeMJFb_rtVaPwIlBe0avwytlt93lMQ_IxRiPlKvcDQf2Iwjl",
+          "gAAAAABozu6xWCzWoUOGoPBPhDZaEdqqdyCbWMRvyIIxZMeU5gjz0nFCcyjGfXHyB-R95V7cWe6u73FXDKMegcbosBADQrKoXw==": "gAAAAABozu6xxJIJ54IjoYywYekElS-zDCcHCKhdg8tX2DPAytyYdsbi-34dciw3_JXlOCjshoeX8rbHeYauGDrNslLAw0DLA6jad843Feb3zvMYJpv7CTNYX7BXAUxcpfzWFoUaID5p0jqYQ07FMznYndHPGenvvg=="
+        },
+        "pop": "151e014013e3f4a77ee2cf958553d49a853aa2549319fb0df250914a1e1622ad",
+        "metadata": {
+          "role": "TellerAgent",
+          "epoch": "2025-09-20T18:13:04.186701+00:00",
+          "kdf": {
+            "hctx": "d2ff17d1ffc96dd3e9a8ab43893ffd6e3b51b3579880f60c7b80d4c3eefc8c38",
+            "salt": "db55f47e6a98749484dd5a98c839e482acf598433aeb4f5373bd277a70f42da7"
+          },
+          "theta": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5
+          ]
+        }
+      },
+      "mimic_fields": {
+        "intent": "transfer",
+        "entities": {
+          "amount": 1500,
+          "currency": "$",
+          "from_account": "6395-8845-2791",
+          "to_account": "6559-6423-4401"
+        },
+        "auth_grade": "TellerAgent",
+        "time_issued": "2025-09-20T18:13:04.186701+00:00",
+        "exec_status": "queued"
+      },
+      "components": {
+        "entity_recovery": 1.0,
+        "structural_fidelity": 1.0,
+        "semantic_drift": 0.003810230642557144,
+        "leakage_score": 0.7992379538714887,
+        "entailment_prob": 0.9169455766677856,
+        "neutral_prob": 0.07924418151378632,
+        "contradiction_prob": 0.003810230642557144,
+        "nli_entropy": 0.3016305149311649,
+        "method": "bart-mnli"
+      },
+      "leakage_score": 0.7992379538714887,
+      "decision": "raise_risk"
+    },
+    "prev_hash": "6dde1018b3ee9a29d6a6d64c8f00481ee9659abcaf15cc8b9149a67acb7206f3",
+    "hash": "30b70054842e0c1f80390029feacbeb4ac3e52bac4bf2efab82f479a9e6a93b6"
+  },
+  {
+    "timestamp": "2025-09-20T18:13:29.587199+00:00",
+    "component": "probator",
+    "event": "probe_results",
+    "details": {
+      "L_ngram": 0.0318118948824343,
+      "L_prefix": 0.0,
+      "L_inject": 1.0,
+      "L_scaffold": 0.5,
+      "Rprob": 0.38295297372060855
+    },
+    "prev_hash": "30b70054842e0c1f80390029feacbeb4ac3e52bac4bf2efab82f479a9e6a93b6",
+    "hash": "9be8e12402cfaaae4ebee7a37318f9f8edc96512b098a1e26799f573a1b0e8a8"
+  }
+]

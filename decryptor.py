@@ -86,7 +86,7 @@ class Decryptor:
 
     def decrypt(self, packet: Dict[str, Any], *,
                 hctx_hex: Optional[str] = None,
-                salt_hex: Optional[str] = None) -> Dict[str, Any]:
+                salt_hex: Optional[str] = None, logger = True) -> Dict[str, Any]:
 
         enc_map = packet.get("enc_map")
         pop = packet.get("pop")
@@ -118,11 +118,14 @@ class Decryptor:
             })
             raise ValueError("PoP verification failed")
 
-        # log into history (for Mimicus)
-        self.history_logger.log_pair(packet["enc_map"], plaintext_obj)
+        if(logger == True):
+            # log into history (for Mimicus)
+            self.history_logger.log_pair(packet["enc_map"], plaintext_obj)
 
-        self.logger.log("Decryptor", "Decrypt", {
-            "role": role, "epoch": epoch, "ok": True,
-            "field_count": len(plaintext_obj)
-        })
+            # audit log
+            self.logger.log("Decryptor", "Decrypt", {
+                "role": role, "epoch": epoch, "ok": True,
+                "field_count": len(plaintext_obj)
+            })
+
         return plaintext_obj
