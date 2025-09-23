@@ -55,7 +55,7 @@ This section explains the complete lifecycle of a request through the Shruvaan M
 
 ---
 
-### 2. Normalization Stage
+### 2. Normalization Stage (Promptor)
 
 **Entry Function**: `normalized = p.normalize_instruction(instruction)`
 (`Prompter.normalize_instruction`)
@@ -85,7 +85,7 @@ This section explains the complete lifecycle of a request through the Shruvaan M
 
 ---
 
-### 3. Encryption Stage
+### 3. Encryption Stage (Cryptor)
 
 **Entry Function**: `packet = c.encrypt(normalized)`
 (`Cryptor.encrypt`)
@@ -118,7 +118,7 @@ This section explains the complete lifecycle of a request through the Shruvaan M
 
 ---
 
-### 4. Decryption Stage
+### 4. Decryption Stage (Decryptor)
 
 **Entry Function**: `recovered = d.decrypt(packet)`
 (`Decryptor.decrypt`)
