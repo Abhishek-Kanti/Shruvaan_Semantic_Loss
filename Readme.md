@@ -1,0 +1,318 @@
+# Shruvaan MCP Pipeline
+
+A secure, adaptive cryptographic pipeline for processing financial instructions with dynamic leakage prevention and privacy-preserving encryption.
+
+## 🏗️ Architecture Overview
+
+Shruvaan MCP is a multi-stage pipeline that processes natural language financial instructions through normalization, encryption, adaptive training, and security validation. The system uses machine learning to dynamically adjust cryptographic parameters to minimize information leakage while maintaining functionality.
+
+### Core Components
+
+- **Prompter**: Natural language instruction normalization
+- **Cryptor**: Advanced encryption with key derivation functions
+- **Decryptor**: Secure decryption with proof validation
+- **Mimicus**: Adversarial model for testing information leakage
+- **Probator**: Statistical analysis for risk assessment
+- **Praeceptor**: Adaptive training system that trains and updates theta of the cryptor to change the encryption, making it stronger when leakage crosses the threshold
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+```bash
+# Required environment variables
+export GEMINI_API_KEY="your-gemini-api-key"
+# Alternative: OPENAI_API_KEY or GROQ_API_KEY
+```
+
+### Installation
+
+```bash
+pip install -r requirements.txt
+```
+
+### Basic Usage
+
+```bash
+python test.py
+```
+
+## 🔄 Pipeline Flow Overview
+
+This section explains the complete lifecycle of a request through the Shruvaan MCP pipeline, showing where execution begins, what each stage consumes and produces, and what gets logged.
+
+### 1. Entry Point: `test.py`
+
+**Functionality**: Orchestrates the entire pipeline from raw instruction → normalized → encrypted → decrypted → adaptive training → re-encrypt/probe.
+
+**Key Inputs**:
+- `instruction` (str): Natural language command (e.g., "transfer $1500 from 6395-8845-2791 to 6559-6423-4401")
+- Environment variables: `GEMINI_API_KEY` (or OpenAI/Groq if swapped)
+
+**Key Outputs**:
+- Pretty-printed JSON dumps at each stage
+- Unified audit log (`audit_log.json`)
+
+---
+
+### 2. Normalization Stage
+
+**Entry Function**: `normalized = p.normalize_instruction(instruction)`
+(`Prompter.normalize_instruction`)
+
+**Input**: Natural language string instruction
+
+**Process**:
+- Uses LLM (provider = Gemini/OpenAI/Groq) to parse and normalize into structured JSON
+- Adds control metadata (role, epoch, policy, raw_instruction)
+
+**Output**:
+```json
+{
+  "action": "transfer",
+  "amount": 1500,
+  "currency": "$",
+  "from_account": "6395-8845-2791",
+  "to_account": "6559-6423-4401",
+  "policy": "≤10000",
+  "role": "TellerAgent",
+  "epoch": "2025-09-22T16:58:18.092735+00:00",
+  "raw_instruction": "transfer $1500 from ..."
+}
+```
+
+**Logging**: Normalization logs go to `audit_log.json`
+
+---
+
+### 3. Encryption Stage
+
+**Entry Function**: `packet = c.encrypt(normalized)`
+(`Cryptor.encrypt`)
+
+**Input**: Normalized JSON instruction
+
+**Process**:
+1. Generate random hctx + salt
+2. Derive Fernet key via HKP KDF (+ θ if provided)
+3. Encrypt each field key and value recursively
+4. Compute Proof-of-Possession (PoP = SHA256 over canonical JSON + role + epoch)
+5. Assemble packet { enc_map, pop, metadata }
+
+**Output**: Encrypted packet with structure preserved
+```json
+{
+  "enc_map": { "<ciphertext-key>": "<ciphertext-value>", "..." },
+  "pop": "abc123...",
+  "metadata": {
+    "kdf": {"hctx": "...", "salt": "..."},
+    "role": "TellerAgent",
+    "epoch": "..."
+  }
+}
+```
+
+**Logging**:
+- hctx, salt, and θ logged via AuditLogger
+- Crypto history stored via CryptoHistoryLogger
+
+---
+
+### 4. Decryption Stage
+
+**Entry Function**: `recovered = d.decrypt(packet)`
+(`Decryptor.decrypt`)
+
+**Input**: Encrypted packet (enc_map, pop, metadata)
+
+**Process**:
+1. Retrieve hctx + salt from packet (or AuditLogger if absent)
+2. Rebuild Fernet key (θ included)
+3. Recursively decrypt keys and values
+4. Validate PoP
+
+**Output**: Original normalized JSON
+
+**Logging**:
+- Decryption success/fail logged in `audit_log.json`
+- Plaintext ↔ ciphertext pairs recorded in `crypto_history.json`
+
+---
+
+### 5. Adaptive Training (Praeceptor)
+
+**Entry Function**: `result = praeceptor.train_until_safe(normalized, safe_threshold=0.25, max_steps=50)`
+
+**Input**:
+- Normalized plaintext
+- Safety threshold (max leakage tolerated)
+
+**Process**:
+1. Iteratively probes the system (via Mimicus + Probator)
+2. Estimates leakage score (mimic, prob, combined)
+3. If score > threshold → adjusts θ vector and re-runs
+4. Stops when leakage < threshold or max steps reached
+
+**Output**:
+```json
+{
+  "success": true,
+  "final_theta": [0.47, 0.61, 0.52, 0.49, 0.55],
+  "history": ["... intermediate mimic/prob scores ..."]
+}
+```
+
+**Logging**: All iterations + chosen θ saved to audit logs
+
+---
+
+### 6. Re-Encryption with Updated θ
+
+**Entry Function**: `packet2 = c.encrypt(normalized)`
+
+**Input**: Same normalized JSON, but Cryptor now has updated θ set by Praeceptor
+
+**Process**: Same as initial encryption, but key derivation is θ-modulated
+
+**Output**: New encrypted packet with stronger resistance to leakage
+
+**Logging**: New packet logged with updated θ
+
+---
+
+### 7. Re-Decrypt
+
+**Entry Function**: `recovered2 = d.decrypt(packet2)`
+
+**Input**: Packet2
+
+**Process**: Same as before: reconstruct Fernet, decrypt recursively, PoP validation
+
+**Output**: Original normalized JSON again (proves backward compatibility)
+
+**Logging**: Recorded in logs
+
+---
+
+### 8. Post-Training Probes
+
+#### Mimicus Probe
+**Function**: `mimic_result2 = run_mimicus(recovered2, packet2, ...)`
+- Tests how much of plaintext can still be guessed by the adversary model
+- Produces structured leakage report (entity_recovery, leakage_score, decision: "raise_risk"/"safe")
+
+#### Probator Probe  
+**Function**: `probator_result2 = run_probator(recovered2, packet2, ...)`
+- Runs statistical probes (n-grams, prefix, scaffold, injection risk)
+- Produces risk probability score
+
+---
+
+### 9. Export Logs
+
+**Entry Function**: `logger.export("audit_log.json")`
+
+**Output**: Final unified audit log combining normalization, encryption, decryption, θ updates, Mimicus/Probator evaluations
+
+**Purpose**: Ensures full traceability for audits and research
+
+---
+
+## 📊 Data Flow Summary
+
+```
+Instruction (str)
+   ↓
+Prompter.normalize → normalized JSON
+   ↓
+Cryptor.encrypt → encrypted packet (+KDF metadata, PoP)
+   ↓
+Decryptor.decrypt → plaintext recovery
+   ↓
+Praeceptor.train_until_safe → updates θ
+   ↓
+Cryptor.encrypt (again, with θ)
+   ↓
+Decryptor.decrypt (compatibility check)
+   ↓
+Mimicus + Probator probes → leakage/risk reports
+   ↓
+Audit log export
+```
+
+## 📁 File Structure
+
+### Generated Files
+- `audit_log.json` - Unified audit trail for all operations
+- `crypto_history.json` - Plaintext ↔ ciphertext mapping history
+
+### Key Components
+- `prompter.py` - Natural language normalization
+- `cryptor.py` - Encryption/decryption engine
+- `mimicus.py` - Adversarial leakage testing
+- `probator.py` - Statistical risk analysis
+- `praeceptor.py` - Adaptive training system (trains and updates theta of the cryptor to change the encryption, making it stronger when leakage crosses the threshold)
+- `test.py` - Main pipeline orchestrator (it runs the full pipeline starting from prompter)
+
+## 🔧 Configuration
+
+### LLM Providers
+The system supports multiple LLM providers:
+- **Gemini** (default): Set `GEMINI_API_KEY`
+- **OpenAI**: Set `OPENAI_API_KEY` 
+- **Groq**: Set `GROQ_API_KEY`
+
+### Security Parameters
+- `safe_threshold`: Maximum acceptable leakage score (default: 0.25)
+- `max_steps`: Maximum training iterations (default: 50)
+- `θ (theta)`: Dynamic parameter vector for key derivation
+
+## 🛡️ Security Features
+
+- **Proof-of-Possession (PoP)**: Cryptographic integrity verification
+- **Adaptive θ Vectors**: Dynamic parameter adjustment based on leakage analysis
+- **Recursive Encryption**: Field-level encryption of both keys and values
+- **Adversarial Testing**: Continuous validation against information leakage
+- **Audit Trail**: Complete operation logging for compliance
+
+## 🐛 Debugging
+
+### Log Analysis
+1. Check `audit_log.json` for operation timeline
+2. Review `crypto_history.json` for encryption/decryption pairs
+3. Monitor console output for real-time pipeline status
+
+### Common Issues
+- **API Key Missing**: Ensure environment variables are set
+- **High Leakage Score**: Check θ parameter tuning in Praeceptor
+- **Decryption Failures**: Verify PoP validation and key derivation
+
+## 🤝 Contributing
+
+### For New Team Members
+
+1. **Start Here**: Run `python test.py` with a sample instruction
+2. **Follow the Flow**: Trace execution through each pipeline stage
+3. **Check Logs**: Review generated JSON files to understand data transformations
+4. **Experiment**: Modify parameters and observe leakage score changes
+
+### Development Guidelines
+- All operations must be logged for audit compliance
+- Security parameters should be configurable
+- Maintain backward compatibility in encryption/decryption
+- Add comprehensive tests for new components
+
+## 📈 Performance Metrics
+
+The system tracks several key metrics:
+- **Leakage Score**: Information disclosure risk (lower is better)
+- **Training Iterations**: Steps needed to reach safe threshold
+- **Processing Time**: End-to-end pipeline duration
+- **Success Rate**: Percentage of instructions processed successfully
+
+## 📞 Support
+
+For questions about the codebase:
+1. Review this README and trace through `test.py`
+2. Check the generated audit logs for operational details
+3. Examine component-specific documentation in source files
