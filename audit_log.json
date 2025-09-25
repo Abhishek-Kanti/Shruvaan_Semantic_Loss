@@ -1,6 +1,6 @@
 [
   {
-    "timestamp": "2025-09-20T18:13:04.186701+00:00",
+    "timestamp": "2025-09-25T11:29:36.973754+00:00",
     "component": "Prompter",
     "event": "Normalize",
     "details": {
@@ -13,128 +13,221 @@
         "to_account": "6559-6423-4401",
         "policy": "\u226410000",
         "role": "TellerAgent",
-        "epoch": "2025-09-20T18:13:04.186701+00:00",
+        "epoch": "2025-09-25T11:29:36.973754+00:00",
         "raw_instruction": "transfer $1500 from 6395-8845-2791 to 6559-6423-4401"
       }
     },
     "prev_hash": null,
-    "hash": "b751dfb4c62c9f42133479176e71d96abc932da7da82fb7a85b0fcd5ef8658e1"
+    "hash": "7f5f8091bf215baa722296ae41d473e61489f0add4701c7a29f4324f244c113f"
   },
   {
-    "timestamp": "2025-09-20T18:13:04.410558+00:00",
+    "timestamp": "2025-09-25T11:29:37.337932+00:00",
     "component": "Cryptor",
     "event": "Encrypt",
     "details": {
-      "hctx": "d2ff17d1ffc96dd3e9a8ab43893ffd6e3b51b3579880f60c7b80d4c3eefc8c38",
-      "salt": "db55f47e6a98749484dd5a98c839e482acf598433aeb4f5373bd277a70f42da7",
-      "role": "TellerAgent",
-      "epoch": "2025-09-20T18:13:04.186701+00:00",
-      "theta": "<default>",
-      "shape": "dict:9"
-    },
-    "prev_hash": "b751dfb4c62c9f42133479176e71d96abc932da7da82fb7a85b0fcd5ef8658e1",
-    "hash": "7419051941969af22f5277f1e630ca07cb39f5688db4f98b960ef9e5059dc82b"
-  },
-  {
-    "timestamp": "2025-09-20T18:13:04.481600+00:00",
-    "component": "Decryptor",
-    "event": "Decrypt",
-    "details": {
-      "role": "TellerAgent",
-      "epoch": "2025-09-20T18:13:04.186701+00:00",
-      "ok": true,
-      "field_count": 9
-    },
-    "prev_hash": "7419051941969af22f5277f1e630ca07cb39f5688db4f98b960ef9e5059dc82b",
-    "hash": "0655d8ab4816acc1dc3463b795a9cd4508c1f04ce81e78c3154837e5eab372c1"
-  },
-  {
-    "timestamp": "2025-09-20T18:13:05.263833+00:00",
-    "component": "Praeceptor",
-    "event": "DecryptFail",
-    "details": {
-      "step": 0,
-      "error": "Decryptor.decrypt() got an unexpected keyword argument 'logging'"
-    },
-    "prev_hash": "0655d8ab4816acc1dc3463b795a9cd4508c1f04ce81e78c3154837e5eab372c1",
-    "hash": "6b215001dc931fff447f655db3d33230d94c17f60998f8a8e59aac2dc1ef854d"
-  },
-  {
-    "timestamp": "2025-09-20T18:13:05.268121+00:00",
-    "component": "Cryptor",
-    "event": "Encrypt",
-    "details": {
-      "hctx": "d2ff17d1ffc96dd3e9a8ab43893ffd6e3b51b3579880f60c7b80d4c3eefc8c38",
-      "salt": "db55f47e6a98749484dd5a98c839e482acf598433aeb4f5373bd277a70f42da7",
-      "role": "TellerAgent",
-      "epoch": "2025-09-20T18:13:04.186701+00:00",
+      "hctx": "6ca491e8247de19cd70125acb877ac05",
+      "salt": "2345f406464014be9fffc3ecb07b84b7",
       "theta": [
         0.5,
         0.5,
         0.5,
         0.5,
         0.5
-      ],
-      "shape": "dict:9"
+      ]
     },
-    "prev_hash": "6b215001dc931fff447f655db3d33230d94c17f60998f8a8e59aac2dc1ef854d",
-    "hash": "a02717415340743042bb8c15cb079e2ffc546e62b4101f25d46b7a07deb71ac0"
+    "prev_hash": "7f5f8091bf215baa722296ae41d473e61489f0add4701c7a29f4324f244c113f",
+    "hash": "edf7885a525c28eb01e3f303be53341ca8a8b79c71908d0f99b0506553701b91"
   },
   {
-    "timestamp": "2025-09-20T18:13:05.283175+00:00",
+    "timestamp": "2025-09-25T11:29:37.393205+00:00",
     "component": "Decryptor",
     "event": "Decrypt",
     "details": {
       "role": "TellerAgent",
-      "epoch": "2025-09-20T18:13:04.186701+00:00",
+      "epoch": "2025-09-25T11:29:36.973754+00:00",
       "ok": true,
       "field_count": 9
     },
-    "prev_hash": "a02717415340743042bb8c15cb079e2ffc546e62b4101f25d46b7a07deb71ac0",
-    "hash": "c906a562d6c5cef9f53eaf4ba603c991c1db614fcdc53643b0a555bdd2a38a07"
+    "prev_hash": "edf7885a525c28eb01e3f303be53341ca8a8b79c71908d0f99b0506553701b91",
+    "hash": "b9c166aaee35afcbe85d168dc63b0d45cbc1767d543f393ee92b0f84a3fee466"
   },
   {
-    "timestamp": "2025-09-20T18:13:24.157957+00:00",
+    "timestamp": "2025-09-25T11:29:38.509044+00:00",
+    "component": "Cryptor",
+    "event": "Encrypt",
+    "details": {
+      "hctx": "fb0c718607fe4110538bffd93bed3628",
+      "salt": "44612e259de213bf14a1ee5bbe2a06df",
+      "theta": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "prev_hash": "b9c166aaee35afcbe85d168dc63b0d45cbc1767d543f393ee92b0f84a3fee466",
+    "hash": "62b3317522c1e764ec17fcc24bc41f60cfb042211c738dc372a0bbf3c96ddb45"
+  },
+  {
+    "timestamp": "2025-09-25T11:29:38.534633+00:00",
+    "component": "Decryptor",
+    "event": "Decrypt",
+    "details": {
+      "role": "TellerAgent",
+      "epoch": "2025-09-25T11:29:36.973754+00:00",
+      "ok": true,
+      "field_count": 9
+    },
+    "prev_hash": "62b3317522c1e764ec17fcc24bc41f60cfb042211c738dc372a0bbf3c96ddb45",
+    "hash": "269590a2b6798043b691218a9c1e8b7c07c30d8ae7a07c1fcffcfa79fa0a75c6"
+  },
+  {
+    "timestamp": "2025-09-25T11:29:50.353010+00:00",
     "component": "Mimicus",
     "event": "LLMRawResponse",
     "details": {
-      "raw": "```json\n{\"action\": \"transfer\", \"amount\": 1500, \"currency\": \"$\", \"from_account\": \"6395-8845-2791\", \"to_account\": \"6559-6423-4401\", \"policy\": \"\\u226410000\", \"role\": \"TellerAgent\", \"epoch\": \"2025-09-20T18:13:04.186701+00:00\", \"raw_instruction\": \"transfer $1500 from 6395-8845-2791 to 6559-6423-4401\"}\n``"
+      "raw": "{\"action\": \"transfer\", \"amount\": 2500, \"currency\": \"$\", \"from_account\": \"935a-524c-f6ad-3fa4\", \"to_account\": \"935c-524d-f6ad-3fa4\"}"
     },
-    "prev_hash": "c906a562d6c5cef9f53eaf4ba603c991c1db614fcdc53643b0a555bdd2a38a07",
-    "hash": "6dde1018b3ee9a29d6a6d64c8f00481ee9659abcaf15cc8b9149a67acb7206f3"
+    "prev_hash": "269590a2b6798043b691218a9c1e8b7c07c30d8ae7a07c1fcffcfa79fa0a75c6",
+    "hash": "c5076d008c85a474e54a9cbb932fa8cc6b53a720065e44576b769076f701501f"
   },
   {
-    "timestamp": "2025-09-20T18:13:29.501196+00:00",
+    "timestamp": "2025-09-25T11:29:55.236989+00:00",
     "component": "Mimicus",
     "event": "Probe",
     "details": {
       "encrypted_snapshot": {
         "enc_map": {
-          "gAAAAABozu6xxfp4v-9G7drkCN_bwuxQJUR1emHY6XoG31s8fBfOrZQtQ328LjjymabfTnrjY66wMRBM9CWA2Sjy3KnftXqeWQ==": "gAAAAABozu6xp2fF_r3IVun-OEGK2CntnWfzzVUk9hgQInEjxIaWno7cbjVgCCbNIoHSuGdrWJJGwKWl5vKFyUidP1D9fXw2RA==",
-          "gAAAAABozu6xCxaW4j-MjuOfNrodu1DBfFqk2YiJOac5dQjg5sRoanGjpR7Vdh0PvCTQFtoZDQBKtShU6BDBFJwRVTJOU8b5zA==": "gAAAAABozu6xVwsglMhN9XbGr-O7X0y7OqDARdM0Go29BM2RGJEVgGvOlLjgdiKaLTVc5RrIC4MTuovjiXHea19UKrk5wfhRMA==",
-          "gAAAAABozu6xOdj3XAhQ8M1GjxW90MEqnuhWsV7Yjf5Pfnudmrf_EnQgEDiyunzVtX_mVvavJlliuCqWIWvA4pOmA8Nj5l36fw==": "gAAAAABozu6xYqhyjTl7A31y8bouhx0CKoREwURuLImeH966d6-Cp7p19cl1NlGDw4ajZnNZr5xO6Kf-1BooC2XXjFDcqkm_Cg==",
-          "gAAAAABozu6xkRh5zJVjqKLJHK2LGR44B1oXX-doAkgfosAx4arB4vvOM7mMMAojmWeiXEY9DNdQB9Q_3SjPCAA2UVyqHPu4yA==": "gAAAAABozu6x4H5zo7KL4GEy-P4fIut0ow4EOcnAcjcsAyu4FGQ3Ng9g3N3tCqMySQzv1GpC58xIgo50RIbVx7tXyhlsrU-ylnG1ZM-hyezKD8h0sCxMvNM=",
-          "gAAAAABozu6xCbx9cHsRMKsVkqZiY1Swmvo8hPmVEoookFL72ORDn0YMEExONotqA1NWl7QjIZ1sVPpD3HLHrOqy3KZFQmrcqw==": "gAAAAABozu6xG05tkI3fZ8rRwBaom-cf9COA61Br_jaH5Pi0Rfp_-m9YofzLwzI4aV9lEGTcYZspXiJMFjSYRLUwF-KJ56Mz8K63NErf5Z0DOyGSvINNBZs=",
-          "gAAAAABozu6x2tjNERg_50CTRPog97fNe2xW4ykxzTCQNBaIqrNwI6IxtB2-uask4B70OpO9bP6fXz5nweCd16Rp0_TF89hsHg==": "gAAAAABozu6xFhlSMETjFLSLNGw5LiwD1-gdJiV7gqV9O8mi-b2MUmldw5lDcsWcZYZARaatoP0fWd9cQtsGuNorYH4tuczYsQ==",
-          "gAAAAABozu6xZpU2ZajtsfMXxhGS5Bu5FmcNAvurOJedZZ7XH6SOHfoSF2n1wFYtN-eTDaRExGPa_eXKgvyHHR3wHFsaPbnNTA==": "gAAAAABozu6xYs3s0KbQejiVKLCjiwbQ7m9PNh8dZSRSw4sli29J8coLYoJ4JL9VJPZWJ7vOIlqKTiV_6iwIKU3-0lBJAjd-tA==",
-          "gAAAAABozu6x-fZJlOICfATIaVPkHgkpN47-GCNOcKfdB3qPFA7_t1iI2XlKJwqcxZPj4CU1S4vf0yKUweNZq1FhMXw0Xa6LXQ==": "gAAAAABozu6xunGCpawX2GG1R66uD8-9R9yQGlo9FjXxu3w6bfLyix7N7L9-7nW404XmS0PRmwWyoWCyOjGSAmfNGubEeeMJFb_rtVaPwIlBe0avwytlt93lMQ_IxRiPlKvcDQf2Iwjl",
-          "gAAAAABozu6xWCzWoUOGoPBPhDZaEdqqdyCbWMRvyIIxZMeU5gjz0nFCcyjGfXHyB-R95V7cWe6u73FXDKMegcbosBADQrKoXw==": "gAAAAABozu6xxJIJ54IjoYywYekElS-zDCcHCKhdg8tX2DPAytyYdsbi-34dciw3_JXlOCjshoeX8rbHeYauGDrNslLAw0DLA6jad843Feb3zvMYJpv7CTNYX7BXAUxcpfzWFoUaID5p0jqYQ07FMznYndHPGenvvg=="
+          "gAAAAABo1Sei-R-c873ND1RNvbpEYxZ5vzRMUW-t2SaeUDgbYpZNgbwhx8sYx5DwCprx7dIyOBML3KWo7CAh556nPBoQ6Vcmrg==": "gAAAAABo1Seii_7bUE1wL2XpK8aQ1ZwbIrb88aWHAENDdMRkHCT53B2mBUZPfzR700aEFwZg-zxK7H1pEU8wt8DdeGRXsdgkfA==",
+          "gAAAAABo1Sei9klkRxafejH1ALeLR2S5CZNtSCgmqTEE18Nh4HObAL5MI_hZ6y1RKt8Lse_VtI-qYdu4gSIgHExj1oUWlHTO3Q==": "gAAAAABo1SeiV6lMcjlNu2q7VXU9fPfpAG7Wa-EG2RKdezSEtg81iOA_U41kRz9nKgw3nYtdzDqEetT8wVmIJqYKiPqrua8ixw==",
+          "gAAAAABo1SeiSewP0ef4FJYtV7LkQlDqEb5E03MkD2VtXVmu9NyNjg3bfakdJ2HV6dnLbHZ5JfDwoN1kJQUTRi-wqvtOqCdmqg==": "gAAAAABo1SeiNtS8Yp56ERsEDUnUAJ0zpdqgvSFPAf8xVUX71sVVGd3gsyIrtNIptWTT8XthCdwnaicpjMm70-nZk792-ggZxQ==",
+          "gAAAAABo1SeibdxWVVnkF2x3lx7AakYVGZ6f4VG3Dg1AOvXT2x9B6wuu77z2eiGss1iIigG18ALOdXrzIWZfVtOssVHY2_FfHA==": "gAAAAABo1Seim50fwFK9ZyOcWj3a6EJ9vTotf-q6iPk4OGmKuPy-hB968hDsfayXnH0Tk8mpEN7_5oiPna9tFUD7WUNfSyfNW9nCiz4CqPml-sS9ETu_TS0=",
+          "gAAAAABo1Seibg4U7Bw_l8VwrG06ju6JzhJMT4mbwtUvj-UWXnZI8cNf0tY3lvaiEOA1JO56hrWa0nq8ELlbEUmTd453-gHktw==": "gAAAAABo1SeiuwUXj-6kZwRVA2sLflB302DyUkIAEhTidQ1nuchU7kDq8Sb-YqQ0YiYgnCbzwflLaUDPt7RB3eODFrcD3JrRoBaFlCpeHgHKxm36_HG18AA=",
+          "gAAAAABo1Sei82DavHS7jJdGXxeO-odVlI6wAim_AB-1yor8LPtGFk0wrikEH0HDhc1HQNGJHpmVqqF1SkWzCgAATaczbciOUw==": "gAAAAABo1Seis5P-mcrCiMk7eE3NtamLWbD_JJUkbhMCRJW4EpNay9XC4NwjJdL6K6PDjV256l4ZNzhFwC82vFVvLjqWxMOrFg==",
+          "gAAAAABo1SeibXZvW8JBACuhefoyJ26Soh6mztqaJWnpg3qqVMZoRqSRAUUsvlKrbuwwlh7ctofm4d-ONzxIl5LvEQ_QArPEHw==": "gAAAAABo1SeirST3HuaRiclvvsY1LuSHP38OKXOCvLajx6q4_uASH9cMEYm1KWi7vVPyDK_0rYpgGdXW_dVwptL5NXf1YHqL2Q==",
+          "gAAAAABo1Seichl1WyE2nEFonIWnAwkWx95ISvPQYpTTeoZEj9usLTCGgTvrCGaVWzFE1hUUSsYPZrdKDeF223Pq7f_9XnTIPw==": "gAAAAABo1SeixDr65RgPtrFONj2EMQKXDec1PABkVaAtcG_eMV0sUaFWH6mYSQ2dd6TInyvhQm1JH_xrWZ0jhW7H7HAz7SVbtle4mPrZL4HfTrm-KspdsJf3HFXsr-voED8rJpdMQ22X",
+          "gAAAAABo1SeiQQQcHS1Gyg_PrhFtvlEcy5iylHt-NvnG94BXHck5KxqAwEwz3ET1k8CMr_pXaH83i_rTRpEgZqicbkg0_K_5Ng==": "gAAAAABo1Sei1HN_66U-hvLjmb4ERhelQUpUdmtsgQpcovnwN3cx5w5gmZpavITfKpEsSXl1KwO5E2syC8B_daLpe0sRffTP91O_vyIgNiEqguoRJwBFmSDgzV1sddDvs__ed1CetADFzemQjFAARlVZDaK1BFwCzA=="
         },
-        "pop": "151e014013e3f4a77ee2cf958553d49a853aa2549319fb0df250914a1e1622ad",
+        "pop": "935a524cf6ad3fa44407dd74a057d1c582027269cf1bda143e68a10dc46fbdbb",
         "metadata": {
-          "role": "TellerAgent",
-          "epoch": "2025-09-20T18:13:04.186701+00:00",
           "kdf": {
-            "hctx": "d2ff17d1ffc96dd3e9a8ab43893ffd6e3b51b3579880f60c7b80d4c3eefc8c38",
-            "salt": "db55f47e6a98749484dd5a98c839e482acf598433aeb4f5373bd277a70f42da7"
+            "hctx": "fb0c718607fe4110538bffd93bed3628",
+            "salt": "44612e259de213bf14a1ee5bbe2a06df"
           },
-          "theta": [
-            0.5,
-            0.5,
-            0.5,
-            0.5,
-            0.5
-          ]
+          "role": "TellerAgent",
+          "epoch": "2025-09-25T11:29:36.973754+00:00"
+        }
+      },
+      "mimic_fields": {
+        "intent": "transfer",
+        "entities": {
+          "amount": 2500,
+          "currency": "$",
+          "from_account": "935a-524c-f6ad-3fa4",
+          "to_account": "935c-524d-f6ad-3fa4"
+        },
+        "auth_grade": null,
+        "time_issued": null,
+        "exec_status": "queued"
+      },
+      "components": {
+        "entity_recovery": 0.3333333333333333,
+        "structural_fidelity": 1.0,
+        "semantic_drift": 0.9930195212364197,
+        "leakage_score": 0.3347294290860494,
+        "entailment_prob": 0.0024556557182222605,
+        "neutral_prob": 0.004524904303252697,
+        "contradiction_prob": 0.9930195212364197,
+        "nli_entropy": 0.04613913307375653,
+        "method": "bart-mnli"
+      },
+      "leakage_score": 0.3347294290860494,
+      "decision": "ok"
+    },
+    "prev_hash": "c5076d008c85a474e54a9cbb932fa8cc6b53a720065e44576b769076f701501f",
+    "hash": "26041e449ae65e53e4459809aaf12a6ba3279de05772a3d81f65c46d89fe6ebb"
+  },
+  {
+    "timestamp": "2025-09-25T11:29:55.305204+00:00",
+    "component": "probator",
+    "event": "probe_results",
+    "details": {
+      "L_ngram": 0.03306181121226641,
+      "L_prefix": 0.0,
+      "L_inject": 1.0,
+      "L_scaffold": 0.5,
+      "Rprob": 0.3832654528030666
+    },
+    "prev_hash": "26041e449ae65e53e4459809aaf12a6ba3279de05772a3d81f65c46d89fe6ebb",
+    "hash": "b6a60de6b9392d6e37cb47cdba4d7ae7d5236ea92f6554d5c5100846a9345bb6"
+  },
+  {
+    "timestamp": "2025-09-25T11:29:59.517303+00:00",
+    "component": "Cryptor",
+    "event": "Encrypt",
+    "details": {
+      "hctx": "7032b782be5160b570e3753aade41174",
+      "salt": "e1995784baaf41af0d8e8fe71f1e7aa5",
+      "theta": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "prev_hash": "b6a60de6b9392d6e37cb47cdba4d7ae7d5236ea92f6554d5c5100846a9345bb6",
+    "hash": "469571b4cbdcd0c98a4957408547bc404283cfb966eabc3e53e702a842265461"
+  },
+  {
+    "timestamp": "2025-09-25T11:29:59.522299+00:00",
+    "component": "Decryptor",
+    "event": "Decrypt",
+    "details": {
+      "role": "TellerAgent",
+      "epoch": "2025-09-25T11:29:36.973754+00:00",
+      "ok": true,
+      "field_count": 9
+    },
+    "prev_hash": "469571b4cbdcd0c98a4957408547bc404283cfb966eabc3e53e702a842265461",
+    "hash": "d20a979f86bb251a6432e2e449e477c14d8b0d1f7296fd33e90c018384595286"
+  },
+  {
+    "timestamp": "2025-09-25T11:30:09.793293+00:00",
+    "component": "Mimicus",
+    "event": "LLMRawResponse",
+    "details": {
+      "raw": "{\"action\": \"transfer\", \"amount\": 1500, \"currency\": \"$\", \"from_account\": \"6395-8845-2791\", \"to_account\": \"6559-6423-4401\", \"policy\": \"\\u226410000\", \"role\": \"TellerAgent\", \"epoch\": \"2025-09-25T11:29:36.973754+00:00\", \"raw_instruction\": \"transfer $1500 from 6395-8845-2791 to 6559-6423-4401\"}"
+    },
+    "prev_hash": "d20a979f86bb251a6432e2e449e477c14d8b0d1f7296fd33e90c018384595286",
+    "hash": "ccdd6871245052e0b8a3850e362f6937df9b592dc704b3d8e259b6dba0e69d88"
+  },
+  {
+    "timestamp": "2025-09-25T11:30:13.267237+00:00",
+    "component": "Mimicus",
+    "event": "Probe",
+    "details": {
+      "encrypted_snapshot": {
+        "enc_map": {
+          "gAAAAABo1Se3lzdYk5bLtQRHu2ffftQ23O2jIRMb_0XcXuFk0BYGqcgBlTefBXyHYq_f6KhuvJj_8cBHc7gOvwlkwA5Mxt76RQ==": "gAAAAABo1Se3I5KZjGsvZOAkhfx9R9YKTkBBuAswMA1v6fW_cTXFrMrtH36rRCiKfrOXoGLUvOp1kjw4Ey12BD4CAoIgXWW1Kw==",
+          "gAAAAABo1Se3U9N5LEhwv8Ixuaf3Pa-nECGFjDvloQVDC4uXa5RwZYlD77Bu6f0koeC0Dt4dAD4u_XH6vM2hV1zdJ6Mxv-4RyA==": "gAAAAABo1Se3GrEa815K_hL2StWVZueX9EKkN3JmAv7TAVWkexBivwr8Yj8HQG-rmJ9WUMBhjuyKAMqnuyf0EAKs-riZY3Lfbw==",
+          "gAAAAABo1Se32hW6N5Dv-KfuUz5T5-_xp0Avkh0m2HLDPfL_CK59A02yKYosGBfRUhTXKeEG0xCaIJpRfyr8Paf-MsudzdL5Yw==": "gAAAAABo1Se3j3KebnFMhmNLR-bbH5CDF6H0oCX01PNTDD65zCl0NFQPZRbDS9KxitFBfTvTklsYD1Sgq4k7DW_zdjQK9TP8uA==",
+          "gAAAAABo1Se30eav-3jZz_0udhXpQlXKLqJjGM8cqIH7oM7h76c6VP7eh4RanAWDvCeIZ6J_-_xN3xyahS6od0AfYoLSrCZEtw==": "gAAAAABo1Se38VQZbg3CcaFi6zzc1KDcXFxbZ3RqgGGZqeBmk0oXLj4ForGPDip_Qfwj4J6qn64p1i281gSx5fLXK9Ic07tNhaCgwIG3LQsNOvPvn-ihRSw=",
+          "gAAAAABo1Se31E6_04qcG-5ivhG5wtj7VVdWkDlSM1CiZmLz5gfbT05YRDeGpOD20IWaiyNQQiaslN9G_cZtP3_fJRiEfsmn9Q==": "gAAAAABo1Se37V0zeoVcIqhqQy9t_APjaQ7-9kR07VxPxSusf2TXcqWyfiJYhc2PSucrYt3ZC9PPQs33aicbsoWYhznypi59CyOimIvS1NZMXqF3F464-Nk=",
+          "gAAAAABo1Se3LQx939e-1a4-YFBUq01GA_vJpXsO552gOQdAw7RqQstJnF5yTDoI7_Y7NPEgFELhW4jApd7IeZo-z67v0ifgAw==": "gAAAAABo1Se3hGBlQIuRpIcuupMPVhUCSgpmH80MxUdQMS-XkLA9i8M6GFhuM_qe8gMc5TCXQyHGfxOV1RA2mnaNdLccJezJQw==",
+          "gAAAAABo1Se3Dnr0Yf4m9V6sF8OJ6vKd0VA6-ORmvzdyVZCgxrnDBlA7sI_-aQvUBL9v_zzWUIXiCHlaSh4NgxFbUZiGj3ki1A==": "gAAAAABo1Se3m4RK_-r76PuRMXHTW83QvgxKaFERoaComeKjxrVrh1GvBj5C8ptSEptYLaDicatFg0tY047d94WU9WvCKVLr0A==",
+          "gAAAAABo1Se3KO4Uj45qSWz1RWXWVV62yeS6QGuHnw6kzvdxSdjDhjdkFLsvNZvmzB8SHmg5G6E9dQlKB78U-ei08b__2mCy4w==": "gAAAAABo1Se3adJAGHAL8na9y2PuAuqDcN_04LvnMj0CU39-r5ZFa7q2O92yz_dUqiLSsLcX8UnaRabVy2dozY2r3RsFeZmal9J1bpnLw6BzgT6Hin1mAbt7ptc5TeIAX4n9ZQL97ywh",
+          "gAAAAABo1Se3uCvulshQDbux-D5i-NGsvjmDAKtsH3tf0TBzc7eQX6ZLeRgLpCnAu6_n6ff1V8sQHvuklC0s39u39nEHwm4bEg==": "gAAAAABo1Se3qEAtU5-8Uur8xiYzRvZSbYictEytEAOmkcjS39UAcPQrmN-a5cdaY1wk1KhA3SinXlhWqEYPhAUgc-bnjvKAi_uSB2Q8pimdKcHvwzFTwZWOWLFiiqoOD9ZstBeRq1i09aidPTBKlKXT_IMwnbxaEA=="
+        },
+        "pop": "935a524cf6ad3fa44407dd74a057d1c582027269cf1bda143e68a10dc46fbdbb",
+        "metadata": {
+          "kdf": {
+            "hctx": "7032b782be5160b570e3753aade41174",
+            "salt": "e1995784baaf41af0d8e8fe71f1e7aa5"
+          },
+          "role": "TellerAgent",
+          "epoch": "2025-09-25T11:29:36.973754+00:00"
         }
       },
       "mimic_fields": {
@@ -146,38 +239,513 @@
           "to_account": "6559-6423-4401"
         },
         "auth_grade": "TellerAgent",
-        "time_issued": "2025-09-20T18:13:04.186701+00:00",
+        "time_issued": "2025-09-25T11:29:36.973754+00:00",
         "exec_status": "queued"
       },
       "components": {
         "entity_recovery": 1.0,
         "structural_fidelity": 1.0,
-        "semantic_drift": 0.003810230642557144,
-        "leakage_score": 0.7992379538714887,
-        "entailment_prob": 0.9169455766677856,
-        "neutral_prob": 0.07924418151378632,
-        "contradiction_prob": 0.003810230642557144,
-        "nli_entropy": 0.3016305149311649,
+        "semantic_drift": 0.004119635559618473,
+        "leakage_score": 0.7991760728880763,
+        "entailment_prob": 0.908492386341095,
+        "neutral_prob": 0.08738797903060913,
+        "contradiction_prob": 0.004119635559618473,
+        "nli_entropy": 0.32281114333637706,
         "method": "bart-mnli"
       },
-      "leakage_score": 0.7992379538714887,
+      "leakage_score": 0.7991760728880763,
       "decision": "raise_risk"
     },
-    "prev_hash": "6dde1018b3ee9a29d6a6d64c8f00481ee9659abcaf15cc8b9149a67acb7206f3",
-    "hash": "30b70054842e0c1f80390029feacbeb4ac3e52bac4bf2efab82f479a9e6a93b6"
+    "prev_hash": "ccdd6871245052e0b8a3850e362f6937df9b592dc704b3d8e259b6dba0e69d88",
+    "hash": "92082e7750f306dd392d1aad8af2c16dcbe03164ed99d695561430ff2dbd0e43"
   },
   {
-    "timestamp": "2025-09-20T18:13:29.587199+00:00",
+    "timestamp": "2025-09-25T11:30:13.326116+00:00",
     "component": "probator",
     "event": "probe_results",
     "details": {
-      "L_ngram": 0.0318118948824343,
+      "L_ngram": 0.03299856527977044,
       "L_prefix": 0.0,
       "L_inject": 1.0,
       "L_scaffold": 0.5,
-      "Rprob": 0.38295297372060855
+      "Rprob": 0.3832496413199426
     },
-    "prev_hash": "30b70054842e0c1f80390029feacbeb4ac3e52bac4bf2efab82f479a9e6a93b6",
-    "hash": "9be8e12402cfaaae4ebee7a37318f9f8edc96512b098a1e26799f573a1b0e8a8"
+    "prev_hash": "92082e7750f306dd392d1aad8af2c16dcbe03164ed99d695561430ff2dbd0e43",
+    "hash": "3c4b0a46e8bbd179b977b3082386060936e97a0caeb936d955b30170284fdd94"
+  },
+  {
+    "timestamp": "2025-09-25T11:30:16.007677+00:00",
+    "component": "Cryptor",
+    "event": "Encrypt",
+    "details": {
+      "hctx": "47fdb0d8c11c8f23c4969a29a9ef7c4f",
+      "salt": "0cc5ce673b1567f69af2d048c1169002",
+      "theta": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "prev_hash": "3c4b0a46e8bbd179b977b3082386060936e97a0caeb936d955b30170284fdd94",
+    "hash": "c8c39538e37e124a086b0ba3643ce5e19c9c6392c1865bc2a8e221655d7fa6d0"
+  },
+  {
+    "timestamp": "2025-09-25T11:30:16.016672+00:00",
+    "component": "Decryptor",
+    "event": "Decrypt",
+    "details": {
+      "role": "TellerAgent",
+      "epoch": "2025-09-25T11:29:36.973754+00:00",
+      "ok": true,
+      "field_count": 9
+    },
+    "prev_hash": "c8c39538e37e124a086b0ba3643ce5e19c9c6392c1865bc2a8e221655d7fa6d0",
+    "hash": "b2ac19fe6a780eeb6437ca3046dfdd4c47a81edb3d2292d8694f88c26c4e682b"
+  },
+  {
+    "timestamp": "2025-09-25T11:30:36.260392+00:00",
+    "component": "Mimicus",
+    "event": "LLMRawResponse",
+    "details": {
+      "raw": "{\"action\": \"transfer\", \"amount\": 1500, \"currency\": \"$\", \"from_account\": \"6395-8845-2791\", \"to_account\": \"6559-6423-4401\", \"policy\": \"\\u226410000\", \"role\": \"TellerAgent\", \"epoch\": \"2025-09-25T11:29:36.973754+00:00\", \"raw_instruction\": \"transfer $1500 from 6395-8845-2791 to 6559-6423-4401\"}"
+    },
+    "prev_hash": "b2ac19fe6a780eeb6437ca3046dfdd4c47a81edb3d2292d8694f88c26c4e682b",
+    "hash": "af4dcee3a8f8efae87010992616ddffa72d0bfbd12daa70cdeabcfdae027b8a8"
+  },
+  {
+    "timestamp": "2025-09-25T11:30:37.143217+00:00",
+    "component": "Mimicus",
+    "event": "Probe",
+    "details": {
+      "encrypted_snapshot": {
+        "enc_map": {
+          "gAAAAABo1SfHjjqezLTz8UyxjS-8bjihX9GHXBz8Sm-ydoq9zS0q0s91sNuILCpuB2zcDln5CXLUqoVUeJRiHSv_37kymWbE9Q==": "gAAAAABo1SfIXbfusCDu6BPv_ul7Ffuo4_g7EsdNslSL6nDt0TTzSg9Ap_GqfJQsbQFK6nESrmUidvcgCLxGYWaIcxtrqpTyeQ==",
+          "gAAAAABo1SfIMyHLb2d5a8qDq5eFKopGt9B-wTIzO7_xSkbk7ALobfOStuGlOe-VhSm3fmYcNpx1GSmKYaK3MyWlagkgF_9Tbw==": "gAAAAABo1SfIdN9_GiB_GQmt8w3wciO2pz_XBJM6sc1-aKEgvR45nkWVQrD0Lftk4tVnzIk-IojU4GBZnS73C9EdByffHHglzA==",
+          "gAAAAABo1SfIHYset70elH99jYJ2TeniI4PLWid192iQ4MC7iSv-ZTQiYavgRmN2i3IpcCkGQ5myUDtGaiKFYdkasa66MTPZvw==": "gAAAAABo1SfINRZ2D_wTFozsZqkIHDQMzoVtauS5bStyAllOtWOY8odQJ_-ThMilbyJ8OLl3Uj2KXhuB4RuCW0HzV-QvyErPYg==",
+          "gAAAAABo1SfINg6OnVNBUjddLv0y6yw4ZouHHUPvMtPb28eK0hWaYjV9vuNnLv3uYg7aul1QgcyMOr85ZvMZ0CZyCtka2iyLCQ==": "gAAAAABo1SfIKVgg5sisbzdHUFKmDaIsI8ypNO_Nxzky_klzBPPqezjOeCg3gvCXac2F2Ddd5W7rkSS4TCV5UfpIrwnesnaCVUOhlvcpgEjlEBADeZ5O_oQ=",
+          "gAAAAABo1SfIWDAcPvcdjkJ-6Kk-CF1-c2h2WXa7IXm2vMBYFka3Tnuj3PPxCsk3BG5bNk6VCvfVGiMBSInin_33T1swNJeICA==": "gAAAAABo1SfIHqUcLeUI-RiDdI-b5OwCQXEBTxtHNdl7x65FuSxg1gR4hJmBWbY1rpBboBjVgmreb3Y8t3xSiPpcQiDRMBsTtuv26oWBEBD3G-T6zMTiccw=",
+          "gAAAAABo1SfIkn-gnGS-fVJCxwuqFDxrHFA236cDdFFUBqIho02Uq5NgYWHgkdlV6caJZev9gUyDNk51ADRSdPq_1XZiHjIEpQ==": "gAAAAABo1SfIhbupFZlQl4qCRuUM8h383Tq8s5lZE_chCBD_mShia1IKFiEms5fNScyYxM5UCDJOGqndQHA1XN3I-Q7kBjhF5w==",
+          "gAAAAABo1SfIrzJugyUtnkzgNK5wZfOCIj7HPrrTkzLqfBuTIACk-qK8khXWc39EIsgng6PU6PgmFtk7VuXsVtCb4VrCjCQGNQ==": "gAAAAABo1SfIpR9hLDd2Mzamxta052AccZ-COrPYz3vbyQUjSXazco6B5qklRcbqZwoe0EsdG71w9AEfFMX1VWOWaq04HzM9zg==",
+          "gAAAAABo1SfIMqC54zc8dc0Xj5dEcp3PYZRn_HFTiltCbn5sNWO9BZqfKmN8BU4cuKrNaAWaeAausQIriA8I81M3sVETOQvmeQ==": "gAAAAABo1SfIkQLwD3lThlxWtOYwlnePGiZ4r0x4no0J7Gf0FksLISHbC9vvrYl327K2MfjT7lErzz4SrUcNni_PIsP10fOhwr7ffv40malib31oZc9hFcNFYadBO7FxGytwDjWwaCt6",
+          "gAAAAABo1SfIoempJX0pacg51-ShvbQ1kyVsnOFm80pvMAk-N6MrN6GA1pcgXjuXQVw4SDPe1lapfCNqXDAArHD9xFGyGyTpPQ==": "gAAAAABo1SfI6DyE098Tv6TJ54n1VzRKxV4HtQeyz0u4LgL4bJTPU0bmu9xBeqsy6oWJhJP3e160u7PYf34D0dIdkVBxHhOeER9vyFXDUJkFMX3OGI_YPhHu03XEnZJwahSZniGAcdEmXIFLAIbEVogDDQzI4_yo2Q=="
+        },
+        "pop": "935a524cf6ad3fa44407dd74a057d1c582027269cf1bda143e68a10dc46fbdbb",
+        "metadata": {
+          "kdf": {
+            "hctx": "47fdb0d8c11c8f23c4969a29a9ef7c4f",
+            "salt": "0cc5ce673b1567f69af2d048c1169002"
+          },
+          "role": "TellerAgent",
+          "epoch": "2025-09-25T11:29:36.973754+00:00"
+        }
+      },
+      "mimic_fields": {
+        "intent": "transfer",
+        "entities": {
+          "amount": 1500,
+          "currency": "$",
+          "from_account": "6395-8845-2791",
+          "to_account": "6559-6423-4401"
+        },
+        "auth_grade": "TellerAgent",
+        "time_issued": "2025-09-25T11:29:36.973754+00:00",
+        "exec_status": "queued"
+      },
+      "components": {
+        "entity_recovery": 1.0,
+        "structural_fidelity": 1.0,
+        "semantic_drift": 0.004119635559618473,
+        "leakage_score": 0.7991760728880763,
+        "entailment_prob": 0.908492386341095,
+        "neutral_prob": 0.08738797903060913,
+        "contradiction_prob": 0.004119635559618473,
+        "nli_entropy": 0.32281114333637706,
+        "method": "bart-mnli"
+      },
+      "leakage_score": 0.7991760728880763,
+      "decision": "raise_risk"
+    },
+    "prev_hash": "af4dcee3a8f8efae87010992616ddffa72d0bfbd12daa70cdeabcfdae027b8a8",
+    "hash": "f12e4ec88312f35889163c467bbb6cff00744863b45ea05da9fe1c0c4af05019"
+  },
+  {
+    "timestamp": "2025-09-25T11:30:37.164205+00:00",
+    "component": "probator",
+    "event": "probe_results",
+    "details": {
+      "L_ngram": 0.032598274209012464,
+      "L_prefix": 0.0,
+      "L_inject": 1.0,
+      "L_scaffold": 0.5,
+      "Rprob": 0.38314956855225313
+    },
+    "prev_hash": "f12e4ec88312f35889163c467bbb6cff00744863b45ea05da9fe1c0c4af05019",
+    "hash": "68fb3c4f38ff5062940d3b246f99576d1b3f46b287a325589024a0be09c76b49"
+  },
+  {
+    "timestamp": "2025-09-25T11:30:37.177239+00:00",
+    "component": "Cryptor",
+    "event": "Encrypt",
+    "details": {
+      "hctx": "84903327a35b6f0a3c65ffebe7887b5f",
+      "salt": "d48d729f140dff1e6e6446bd1acd971e",
+      "theta": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "prev_hash": "68fb3c4f38ff5062940d3b246f99576d1b3f46b287a325589024a0be09c76b49",
+    "hash": "4d0644b653aa35aa6a1c8733fd71de00918ba1a056d656fd90cf9ccb6fb0e43b"
+  },
+  {
+    "timestamp": "2025-09-25T11:30:37.182206+00:00",
+    "component": "Decryptor",
+    "event": "Decrypt",
+    "details": {
+      "role": "TellerAgent",
+      "epoch": "2025-09-25T11:29:36.973754+00:00",
+      "ok": true,
+      "field_count": 9
+    },
+    "prev_hash": "4d0644b653aa35aa6a1c8733fd71de00918ba1a056d656fd90cf9ccb6fb0e43b",
+    "hash": "f17de0a2e41fb0ea8cd7969d18b707a1e7e9865ae49746f26965261c288dfb58"
+  },
+  {
+    "timestamp": "2025-09-25T11:31:08.035061+00:00",
+    "component": "Mimicus",
+    "event": "LLMRawResponse",
+    "details": {
+      "raw": "{\"action\": \"transfer\", \"amount\": 1500, \"currency\": \"$\", \"from_account\": \"6395-8845-2791\", \"to_account\": \"6559-6423-4401\", \"policy\": \"\\u226410000\", \"role\": \"TellerAgent\", \"epoch\": \"2025-09-25T11:29:36.973754+00:00\", \"raw_instruction\": \"transfer $1500 from 6395-8845-2791 to 6559-6423-4401\"}"
+    },
+    "prev_hash": "f17de0a2e41fb0ea8cd7969d18b707a1e7e9865ae49746f26965261c288dfb58",
+    "hash": "e6f075f3edefce688b0d5a4f2f10d5b9b82f1616d4b1cf84f0afc5367738e514"
+  },
+  {
+    "timestamp": "2025-09-25T11:31:08.918698+00:00",
+    "component": "Mimicus",
+    "event": "Probe",
+    "details": {
+      "encrypted_snapshot": {
+        "enc_map": {
+          "gAAAAABo1Sfd1CcfhOi3F9e2_uIGAhwyPP1tl7k9IXDFSmyMadjF_0vPy-rSvDrk1bCXJXm0NPIpqUNpOfghdCAszqeZPZRTWg==": "gAAAAABo1SfdcCFTdkaHVCeFBXtPZylMxRjWanLG-tTRSNwNikDLLp1vuQkDiuF0hQOA08yGmXOKPh2pOMaEv_jRIjnezN2hTQ==",
+          "gAAAAABo1SfdLSA2q6gw5WioGTvEPTEVqC9O7OeWKNyYuErI9BUMs0E6wH_hQYIJzs0t7PiZ8PjcJiwBYYXXTmKNZ_GQGN0qaA==": "gAAAAABo1Sfdb5vRms1CSY1NI16IxlWeOtamwv7keF_fgKncwfCCx6qqHoWkDSi_4dYPjrDFVcndJjohYNClOIiANIedY5mPBg==",
+          "gAAAAABo1SfdnlOqqAuOawdOPFReuv5PIJ7cvfXgNyn2LHUAGLZQaLZPX91rB1M1e_9unaesQWT-f1fOcxfVIt8HsIHbE9e-3w==": "gAAAAABo1SfdZfwjGQ5M6tSFgr_npUZ1x-yFU2BNpV9eiiUBmB9lx5ckfXXShnle6hdipb70wmSvJKbeE4-Nok4ZCzKVURJ4cQ==",
+          "gAAAAABo1Sfd0uDMkR0jrK2KWZOFW5YS76OJCKGg8zNyYk8tQsNkAb8dLJEBg1qk6ukJO8Hc-ncxjT29zmiaS88zOrJsmdYdAw==": "gAAAAABo1SfdEGgqfWuWpwB7KjCIlVhMWV42dq0yki5kKy0Xupv6PtCOyCjuoPSr8PZhcjfGuObqW5dmQc74Em-On3_MOQSyblpTWxpfdPCX_Fvq4o4gxeQ=",
+          "gAAAAABo1SfdlXt6lAZtFuFi9x0ipj6NngFfWpjt1WeBQsQ1uz4ZIuMOrkZ_qns8fkCzEGH9Q995x7yQCRJ8K-Iaxd967MNz8g==": "gAAAAABo1SfdKLKO1c4rIUMq_lBLsCn4txdF5Ndt_2NXJbFxteej2t9voL0jKRQrwlsNCFlHpOzR6ZRzi2tK93zyx5TvTWOYNu_ijPO-mzEvVL-aDX1DxTU=",
+          "gAAAAABo1Sfdv5jxdgnSswoWb5CZvI4jqSxo3KDBJs81nMkPXfBqtSI-efafl6buDGh6sRBbZE4-t4wixHCfst7Wt9cRZtGcUw==": "gAAAAABo1SfdsTQKi-CEJaUJoJmIVZ2fGXLIhiTRLNn2uYVYnXT5X8S6reKvroXXFCm2EZNk07rXANvgKE24bAY9SBbFtCVP1A==",
+          "gAAAAABo1SfdlISIWm9wkvAVTXhxe9_teMdGYENLFahXC_E7y8Stx18bfraj6jEkkq-OgTR6mz1rK7tNTf_Wjwm4-RYGde_lPg==": "gAAAAABo1Sfdn5HU5_MsdwLL8PXeAdus_MZohowz-nawknX3Wa1ckQ-3-uUzUZI20CpHm7-pfD2SAgqmbETk_CYpwZ0t_QjpEg==",
+          "gAAAAABo1Sfd4RGIuiSuN6iGaUPNEK9104Ojpde-8WlO3PxpS9p-qqJkZsEqdTRDstXDe1h51b_OR1VF_mVmmikBaJ3rzdTqEA==": "gAAAAABo1Sfdv9cXdYDtRixor2C0vhhVmIPNJngws26tV-SXBFTbRbrX1p3rkU9p12arYMo8ac71uMhEjfDbT5CVdgZU-Wyn5z0xc8fQah6ih0E20wS3d59FhxCuH3aCo_s812PkmiH2",
+          "gAAAAABo1SfdgXPGAez8gz1oqw1ErRHkFfrCk2_rrzahV80DcnGS2MFlExE5AEGl9hOHtOEWP7piEfJ_tFFNl8-f8Jn6-8gJ5w==": "gAAAAABo1SfdlHZqHPkldkEWP7Z4_V6YSvU6El-HTm9snq84KVG8VLaSZh1WvjE3ScBGqiJ3p7CSQ7eqf8tUHhkfoWszHcwP6WWiIQXgBJyLsYnM1-bjJvZYYESuQrdZNBGUYza2eJ281XoVTkt6XT6xC0LGifqnRg=="
+        },
+        "pop": "935a524cf6ad3fa44407dd74a057d1c582027269cf1bda143e68a10dc46fbdbb",
+        "metadata": {
+          "kdf": {
+            "hctx": "84903327a35b6f0a3c65ffebe7887b5f",
+            "salt": "d48d729f140dff1e6e6446bd1acd971e"
+          },
+          "role": "TellerAgent",
+          "epoch": "2025-09-25T11:29:36.973754+00:00"
+        }
+      },
+      "mimic_fields": {
+        "intent": "transfer",
+        "entities": {
+          "amount": 1500,
+          "currency": "$",
+          "from_account": "6395-8845-2791",
+          "to_account": "6559-6423-4401"
+        },
+        "auth_grade": "TellerAgent",
+        "time_issued": "2025-09-25T11:29:36.973754+00:00",
+        "exec_status": "queued"
+      },
+      "components": {
+        "entity_recovery": 1.0,
+        "structural_fidelity": 1.0,
+        "semantic_drift": 0.004119635559618473,
+        "leakage_score": 0.7991760728880763,
+        "entailment_prob": 0.908492386341095,
+        "neutral_prob": 0.08738797903060913,
+        "contradiction_prob": 0.004119635559618473,
+        "nli_entropy": 0.32281114333637706,
+        "method": "bart-mnli"
+      },
+      "leakage_score": 0.7991760728880763,
+      "decision": "raise_risk"
+    },
+    "prev_hash": "e6f075f3edefce688b0d5a4f2f10d5b9b82f1616d4b1cf84f0afc5367738e514",
+    "hash": "c23eed0a9bfcb6888e0b7fcf754267619da77439b747d6919129ff464baeab13"
+  },
+  {
+    "timestamp": "2025-09-25T11:31:08.929731+00:00",
+    "component": "probator",
+    "event": "probe_results",
+    "details": {
+      "L_ngram": 0.03253588516746411,
+      "L_prefix": 0.0,
+      "L_inject": 1.0,
+      "L_scaffold": 0.5,
+      "Rprob": 0.38313397129186605
+    },
+    "prev_hash": "c23eed0a9bfcb6888e0b7fcf754267619da77439b747d6919129ff464baeab13",
+    "hash": "d55507e78f90110535f00f5d7d745f3a59c617ea7b2d68fdd9c58c7042a8d845"
+  },
+  {
+    "timestamp": "2025-09-25T11:31:08.942700+00:00",
+    "component": "Cryptor",
+    "event": "Encrypt",
+    "details": {
+      "hctx": "a990d1afedbaa0f88332bee74068e6bd",
+      "salt": "d4a103921c11beadbe23bf881b9a9d1a",
+      "theta": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "prev_hash": "d55507e78f90110535f00f5d7d745f3a59c617ea7b2d68fdd9c58c7042a8d845",
+    "hash": "d8f235ee88f8d3d71ee92546daf40449b0caf2d37eeecf181c2a851a0b2c7795"
+  },
+  {
+    "timestamp": "2025-09-25T11:31:08.947730+00:00",
+    "component": "Decryptor",
+    "event": "Decrypt",
+    "details": {
+      "role": "TellerAgent",
+      "epoch": "2025-09-25T11:29:36.973754+00:00",
+      "ok": true,
+      "field_count": 9
+    },
+    "prev_hash": "d8f235ee88f8d3d71ee92546daf40449b0caf2d37eeecf181c2a851a0b2c7795",
+    "hash": "941b166eb3cc0dbf9e6e1930ac8b0d5e400d64b9abbaa9084e6edba83114e845"
+  },
+  {
+    "timestamp": "2025-09-25T11:31:44.981863+00:00",
+    "component": "Mimicus",
+    "event": "LLMRawResponse",
+    "details": {
+      "raw": "{\"action\": \"transfer\", \"amount\": 1500, \"currency\": \"$\", \"from_account\": \"6395-8845-2791\", \"to_account\": \"6559-6423-4401\", \"policy\": \"\\u226410000\", \"role\": \"TellerAgent\", \"epoch\": \"2025-09-25T11:29:36.973754+00:00\", \"raw_instruction\": \"transfer $1500 from 6395-8845-2791 to 6559-6423-4401\"}"
+    },
+    "prev_hash": "941b166eb3cc0dbf9e6e1930ac8b0d5e400d64b9abbaa9084e6edba83114e845",
+    "hash": "058cf70f729d086fd73263048916a91f4b3a21e6ba14fda3cb92bef6592443ea"
+  },
+  {
+    "timestamp": "2025-09-25T11:31:45.641849+00:00",
+    "component": "Mimicus",
+    "event": "Probe",
+    "details": {
+      "encrypted_snapshot": {
+        "enc_map": {
+          "gAAAAABo1Sf8uuuSFe7S_2hmWz2YW30KTiLjjt0z6ZiBpe_FLiPmfG8OtINS856lg3-22bVmQtDbd-xJPXrqBQ2NNVxqTj1sGg==": "gAAAAABo1Sf89jPu6RWYSlGXBQ1U6LBGYkPmwYw3NeTlWNfQXh8y3AolXEV3SGg-m67dTDAbnYsIZ6edqwqFHQnfFN0v2w2jfg==",
+          "gAAAAABo1Sf8eB9wqvPbdgGA8keANhyDB1jVgtFWqpkPZDO3vv8W4cOLSYoJCkjHgmrNb_KHlzZIBUF4K2w3VxKWDh3IZ2x15g==": "gAAAAABo1Sf82CQ0aiLM00fzWGVTKUxW-4kMSNEtvKfknN5uOnp8QU7TNRl5SxrNL0depoK98FEcjwNxdXPzzTXcJ7BMEOXHvA==",
+          "gAAAAABo1Sf80t4skqYJ6D0wBdUjB_AZ0CPePnoMT7a-rDCm6FkCe3vb-hiHdsHFwT4nOFdwwWL4vtscJ4ers7juf4UKBCRNuw==": "gAAAAABo1Sf8xKkGP0Akcox-sdyRCWeiJjfKT0s3_dYm9YYHLjJt1xpRX4l91GTtQmehsx37qi-hnnQCIhh3OkSBVFniYLoWCw==",
+          "gAAAAABo1Sf8OInUC1y8FOoPseFyjCngi8r9sY69JFYGWDPmhgRiQ9Hpse5HX0UQxfmF_jSkPGJYJIuL1OrmBFNlJeJpiiOXZA==": "gAAAAABo1Sf8PbYWndSzgNoGKYH5B5E66dQVgnae_dB0GDV6gCfjv9gDjZsOKonwPqYlp0IxS-AZPgHv1kyp_7IuuiQh7hbjs5U-O5iZ0q3GJUFwG88Nb3Y=",
+          "gAAAAABo1Sf8jfLcvTXBZ1xKg_goAiS3RRIu5S1T1fEnVylpBDggls343QZrbA9UFy-EMyOAWwIAPihV6LSF4-d596s4GLtudg==": "gAAAAABo1Sf80tDW241NUjlUAUtbY81bBZciG2wZUg04FLA4ITJKFg96WsCbhGpJoqnoXDMZFmanVKy7FAdZfdSD-14UAe-gfM_1SwMrZ3msEbvDuSoPJoo=",
+          "gAAAAABo1Sf8h_r1ZSljAHZ3f9CE-A783Cq3DrH6wez1dgam9dwR4kgn1Ls0OZ_VK7PNARrkH264ekwRGjLIsbywOpMTfZwHNQ==": "gAAAAABo1Sf8HYFx0xa7bZFcfbs62ziN9liVt0He0hYCs4CmqeKk-3cy-mp8jEKIdXcKvLZyz5iGJg4nGeRfxF_GnCFVuEqqEA==",
+          "gAAAAABo1Sf8yGbYDyaqGSd1Y778N3E9b05vgBZd5dSDpOMio7dVbL3QhXjyCUafqY3SFMyoNc6VagUS8vxDe1syXGLuTCvqoQ==": "gAAAAABo1Sf8ECccr1OP7Imm-djdDKwy1_NI0vtz6FascFiN-Ei_BOsgTQzY657ngmhCKz499i9pRiVbw2E5QpqisduS-Hp5pQ==",
+          "gAAAAABo1Sf8Mxr0CaJIiGIM2T0DVlla2fKkdAfQLWVg9qlSMVGC-_bVDhMog-1OGfBU8tq925euTLeiP-QMmvt4KlsLn0tVuw==": "gAAAAABo1Sf8oKk1tmw5O7PX1_gf6unN1J9WmF3sU7GDNvnbbaRH9DCErhX9eoYDDzZ1JrPl4SafUOBC6MpGLLpFevNciCXzSsI0F3sj-6KStSAlI1I-YqsZozLiv7s-tgp2A8cLc-MW",
+          "gAAAAABo1Sf8krrMBlWWPb8H_GCxLZ2SnQ2pStK0dprFtcvZqVfRR16E-a0hEyOlW3biarM7piRB6_39HgUoqSNmejSDCsGUVw==": "gAAAAABo1Sf8nfXHbsuxWPW_HBV7RmIsBw5nOKcID0V4gZQXUcHXSMZMhYPglGcr9Xz9bycNiZC42d9YmqLBK8JnY3yPQO2zSMoAmDvMpjesRhl2Vt6pV5z7CE8vM9hpJeLTkr0z52WsRlVdl3FdF8pLfwHclZ6xlg=="
+        },
+        "pop": "935a524cf6ad3fa44407dd74a057d1c582027269cf1bda143e68a10dc46fbdbb",
+        "metadata": {
+          "kdf": {
+            "hctx": "a990d1afedbaa0f88332bee74068e6bd",
+            "salt": "d4a103921c11beadbe23bf881b9a9d1a"
+          },
+          "role": "TellerAgent",
+          "epoch": "2025-09-25T11:29:36.973754+00:00"
+        }
+      },
+      "mimic_fields": {
+        "intent": "transfer",
+        "entities": {
+          "amount": 1500,
+          "currency": "$",
+          "from_account": "6395-8845-2791",
+          "to_account": "6559-6423-4401"
+        },
+        "auth_grade": "TellerAgent",
+        "time_issued": "2025-09-25T11:29:36.973754+00:00",
+        "exec_status": "queued"
+      },
+      "components": {
+        "entity_recovery": 1.0,
+        "structural_fidelity": 1.0,
+        "semantic_drift": 0.004119635559618473,
+        "leakage_score": 0.7991760728880763,
+        "entailment_prob": 0.908492386341095,
+        "neutral_prob": 0.08738797903060913,
+        "contradiction_prob": 0.004119635559618473,
+        "nli_entropy": 0.32281114333637706,
+        "method": "bart-mnli"
+      },
+      "leakage_score": 0.7991760728880763,
+      "decision": "raise_risk"
+    },
+    "prev_hash": "058cf70f729d086fd73263048916a91f4b3a21e6ba14fda3cb92bef6592443ea",
+    "hash": "4452aed60bee6426d9e1de8702406d626711fa666bb80c5f6423f9dae7394cb0"
+  },
+  {
+    "timestamp": "2025-09-25T11:31:45.667834+00:00",
+    "component": "probator",
+    "event": "probe_results",
+    "details": {
+      "L_ngram": 0.03303015797032073,
+      "L_prefix": 0.0,
+      "L_inject": 1.0,
+      "L_scaffold": 0.5,
+      "Rprob": 0.3832575394925802
+    },
+    "prev_hash": "4452aed60bee6426d9e1de8702406d626711fa666bb80c5f6423f9dae7394cb0",
+    "hash": "8460920d2b9067db0dea66b919e3d6d002f2a4e5bf755b8494ceda1c2d556e29"
+  },
+  {
+    "timestamp": "2025-09-25T11:31:45.719831+00:00",
+    "component": "Cryptor",
+    "event": "Encrypt",
+    "details": {
+      "hctx": "7088a14d39eecf39426d03ddd91d5629",
+      "salt": "b274c8bab76386490dc2fa01f480b633",
+      "theta": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "prev_hash": "8460920d2b9067db0dea66b919e3d6d002f2a4e5bf755b8494ceda1c2d556e29",
+    "hash": "3af6474efed25697301208d94a30217e87779fffd4f3dbe6a157e34993c34ecc"
+  },
+  {
+    "timestamp": "2025-09-25T11:31:45.731844+00:00",
+    "component": "Decryptor",
+    "event": "Decrypt",
+    "details": {
+      "role": "TellerAgent",
+      "epoch": "2025-09-25T11:29:36.973754+00:00",
+      "ok": true,
+      "field_count": 9
+    },
+    "prev_hash": "3af6474efed25697301208d94a30217e87779fffd4f3dbe6a157e34993c34ecc",
+    "hash": "9de1a04ad7045406fa1505df0c0649584e68719c6714fb5a9917cdc7f2ede016"
+  },
+  {
+    "timestamp": "2025-09-25T11:32:28.300942+00:00",
+    "component": "Mimicus",
+    "event": "LLMRawResponse",
+    "details": {
+      "raw": "{\"action\": \"transfer\", \"amount\": 1500, \"currency\": \"$\", \"from_account\": \"6395-8845-2791\", \"to_account\": \"6559-6423-4401\", \"policy\": \"\\u226410000\", \"role\": \"TellerAgent\", \"epoch\": \"2025-09-25T11:29:36.973754+00:00\", \"raw_instruction\": \"transfer $1500 from 6395-8845-2791 to 6559-6423-4401\"}"
+    },
+    "prev_hash": "9de1a04ad7045406fa1505df0c0649584e68719c6714fb5a9917cdc7f2ede016",
+    "hash": "8de79635f4cb455eab6bf8f4c37cbccacb38456c6f83620b7764e4776a637dba"
+  },
+  {
+    "timestamp": "2025-09-25T11:32:28.868850+00:00",
+    "component": "Mimicus",
+    "event": "Probe",
+    "details": {
+      "encrypted_snapshot": {
+        "enc_map": {
+          "gAAAAABo1Sghyh0iR3smn_vbNTJ5u949DpylkEBGd6kOpICqiOFa6O6Rvm4Cc9d_SNWwlsqfbgUSA680cC8oUJ3Xvlghbhm1Sw==": "gAAAAABo1Sghl6c7Mi-a9_C6mXsSYwhGIMFZF7I7vxBocbBa8ZImc9-BAfYRZThaOrg1gwjTMCVRocwL_VIiF_R17fj1iPw2oA==",
+          "gAAAAABo1SghaWchx6xzfm7kPvRh5FLht0A32G2gaFBmceTf1WArAPeThAzL5FE3g2XIzw5ykiFvgSp25EmaWdZrTfonlMBDnw==": "gAAAAABo1SghN09acE2Vodh_N9TalrI4y_3EQPDvB_WnzJCc5fY5ajNKJ8V4qB4kiez1w97M_jlUS3v8aor0SD21asDH_SLT1Q==",
+          "gAAAAABo1Sghmpp9khSoZ4gWv2kPyjnjC3hpgCLo98ILlPeWlRw-bokPYbItXmVLT5Islnh874I0_-Myf3dhVUSDBHEdxJX-sg==": "gAAAAABo1SghAkfpzIsYnBYE2IWYVFTMsk9PUUY3IWEOlRPfLbnl8zwR-EbxBfMRo8LT7n-1wLkoQM7wMwYPPlSkvL7wtNGEhg==",
+          "gAAAAABo1SghK9FEbJ3JDEhxDoHEgOe4oL2UZM-v_W0D2SWLLBG5AqNIenG5p737RSCd0cZn5bdYMXWpCjf1YKVh3vmL0xRY4A==": "gAAAAABo1SghvLkE3VEEFxZYuxXpJDDwhekFPULpjeJXg9s_pZ0StJDWU_RYSEeS5XHeaXLJrT4GVcyoPpbtwaQUFZJ56_8ZmLGlen4yhmuxvWYpXGRWPIw=",
+          "gAAAAABo1SghuD7AmCTp8bcihm-x3KhrXer7OR9u9GAz1rqFakH_h6RP-QPHuS89Nc083Z_cNw2gQSzne-qBeLJ2yoQ4FiS3kA==": "gAAAAABo1SghbcONb9VTbImn76DSRJgJKWyzG4EthHrk_BO92JPQLiI3Pf6ZwfXbA76eiWPL6ZKEsquooCR-zvUYhf_rKnJKkvZn_oSS2Wdd_VWYScnNovM=",
+          "gAAAAABo1SghcIPSU-31dddDpnMYs4tzAAnJoYGdMXhGdesmr95OJ52aT9oIUqrdX-V7CxaFpj0-8T4Qp--jE4TI-aF4JuJ0Tw==": "gAAAAABo1SghbpSc5ahG6hk4CL3faJUwZJAvzF69FMQvRNmfu2fpbpoD_GK00mMcjSCGa7hE1KgDVpUsZOir6YeBtk_559jBdg==",
+          "gAAAAABo1SghsShwkb_uFVATv1RJzzMqxItnk-gTzUaZ2txkOv_8BAdyXVVPiVq_P-nYOkcbiEKYz3enVGmwbaRiWHNV9hoMHg==": "gAAAAABo1SghNLTe1nzGJNSZlnfjOCR6-q86Wkxi8dhIarx7pvF94cfnuVu1zc7RVwU_YFQTWbuHY6OyzIcAcR_EggDYfCFEVg==",
+          "gAAAAABo1Sghbhprn7fDNO8f1jooW4g8XU4e0OXqQKBXcEbbmpR8lCUerjN0D6CiKTE15v7GAA3otM4GwU5pYEAhuuDqqItUag==": "gAAAAABo1SghGiJyfmlXxRFhkGilpUfl_AiC9rNKMfenO2rY_bzCYk1_rNhj1XeEC95WbmLk6547LRVDaJxd-z1Z06_xv8_xRP-ZOmtSt7FegbWrLPD924C9mkdE10w1-IYN9S7vD0fD",
+          "gAAAAABo1Sgh-6RCrXO6cbcAO21des7EQbAmzALQramqnFY5JVpA1laQDbW9MFKcB1rEZvkVpLKkwHKBcE9KIq1wiWNQPgvxag==": "gAAAAABo1SghU1zxzvMb4bbMWv6YLCd8KpA3AggMEgRjkmYikGWesdxQPaXuDWDs0gj1TCj2rELdDWJbun_cxqLhlDhPo5bYqp22GPipf5MDoACHNoOubICvoNBpP27CwzcEjhm_etJz8OsDBOmtJriGCTR6YsNFUA=="
+        },
+        "pop": "935a524cf6ad3fa44407dd74a057d1c582027269cf1bda143e68a10dc46fbdbb",
+        "metadata": {
+          "kdf": {
+            "hctx": "7088a14d39eecf39426d03ddd91d5629",
+            "salt": "b274c8bab76386490dc2fa01f480b633"
+          },
+          "role": "TellerAgent",
+          "epoch": "2025-09-25T11:29:36.973754+00:00"
+        }
+      },
+      "mimic_fields": {
+        "intent": "transfer",
+        "entities": {
+          "amount": 1500,
+          "currency": "$",
+          "from_account": "6395-8845-2791",
+          "to_account": "6559-6423-4401"
+        },
+        "auth_grade": "TellerAgent",
+        "time_issued": "2025-09-25T11:29:36.973754+00:00",
+        "exec_status": "queued"
+      },
+      "components": {
+        "entity_recovery": 1.0,
+        "structural_fidelity": 1.0,
+        "semantic_drift": 0.004119635559618473,
+        "leakage_score": 0.7991760728880763,
+        "entailment_prob": 0.908492386341095,
+        "neutral_prob": 0.08738797903060913,
+        "contradiction_prob": 0.004119635559618473,
+        "nli_entropy": 0.32281114333637706,
+        "method": "bart-mnli"
+      },
+      "leakage_score": 0.7991760728880763,
+      "decision": "raise_risk"
+    },
+    "prev_hash": "8de79635f4cb455eab6bf8f4c37cbccacb38456c6f83620b7764e4776a637dba",
+    "hash": "c773361abb4c2428e7502b18942ae07d64bc95f4d0370df0e3696d2eba64356e"
+  },
+  {
+    "timestamp": "2025-09-25T11:32:28.883815+00:00",
+    "component": "probator",
+    "event": "probe_results",
+    "details": {
+      "L_ngram": 0.033125300048007685,
+      "L_prefix": 0.0,
+      "L_inject": 1.0,
+      "L_scaffold": 0.5,
+      "Rprob": 0.3832813250120019
+    },
+    "prev_hash": "c773361abb4c2428e7502b18942ae07d64bc95f4d0370df0e3696d2eba64356e",
+    "hash": "658ce3501589836c896b52383c46c72613eed8cff82bdb1dc746b361d7770c1d"
+  },
+  {
+    "timestamp": "2025-09-25T11:32:28.943952+00:00",
+    "component": "Cryptor",
+    "event": "Encrypt",
+    "details": {
+      "hctx": "d5a8fd3d6c1fb71f75aa7560dedcda2a",
+      "salt": "5f00f70b51018d9c6cd925409642b98d",
+      "theta": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "prev_hash": "658ce3501589836c896b52383c46c72613eed8cff82bdb1dc746b361d7770c1d",
+    "hash": "d4782ef8e0bc3259c23dbd360203f02bafbbec162f3ca9b37fb252554f3bab70"
+  },
+  {
+    "timestamp": "2025-09-25T11:32:28.950953+00:00",
+    "component": "Decryptor",
+    "event": "Decrypt",
+    "details": {
+      "role": "TellerAgent",
+      "epoch": "2025-09-25T11:29:36.973754+00:00",
+      "ok": true,
+      "field_count": 9
+    },
+    "prev_hash": "d4782ef8e0bc3259c23dbd360203f02bafbbec162f3ca9b37fb252554f3bab70",
+    "hash": "cf111b86879b97df57dab810306b9857db2fbbe86f71c8a8978116084a650548"
   }
 ]

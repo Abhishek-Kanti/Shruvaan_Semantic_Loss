@@ -1,9 +1,10 @@
+# cryptor.py
 import hashlib
 import json
-import torch
-import string
+import os
 import base64
 from typing import Any, Dict, Union, Optional, List
+
 from cryptography.fernet import Fernet
 from audit_logger import AuditLogger
 from crypto_history_logger import CryptoHistoryLogger
@@ -16,7 +17,7 @@ class Cryptor:
     - Derives a Fernet key via HKP (hctx + salt, optionally modulated by theta)
     - Encrypts every key and every leaf value (type preserved via JSON-encode)
     - Preserves JSON structure (dict/list)
-    - Emits enc_map + PoP + metadata
+    - Emits enc_map + PoP + metadata (kdf hints)
     """
 
     def __init__(self, logger: Optional[AuditLogger] = None,
@@ -28,12 +29,13 @@ class Cryptor:
         self.history_logger = history_logger   # shared logger injected here
 
         # θ parameters (adaptive encryption knobs)
-        self.theta = theta or None
+        # default to mid-range values if not supplied
+        self.theta = theta or [0.5, 0.5, 0.5, 0.5, 0.5]
 
     # ----- Theta management --------------------------------------------------
 
     def set_theta(self, theta: List[float]):
-        """Set encryption control parameters θ (from Preceptor)."""
+        """Set encryption control parameters θ (from Praeceptor)."""
         self.theta = theta
 
     def get_theta(self) -> Optional[List[float]]:
@@ -53,7 +55,7 @@ class Cryptor:
             return hctx_hex + salt_hex
 
         # Simple modulation: mix theta values into string
-        theta_str = ",".join([f"{t:.4f}" for t in self.theta])
+        theta_str = ",".join([f"{float(t):.4f}" for t in self.theta])
         return hctx_hex + salt_hex + theta_str
 
     def _hkp_key_bytes(self, hctx_hex: str, salt_hex: str) -> bytes:
@@ -69,9 +71,14 @@ class Cryptor:
     # ----- structure encryption ---------------------------------------------
 
     def _encrypt_structure(self, cipher: Fernet, obj: JsonObj) -> JsonObj:
+        """
+        Recursively encrypt dict keys and values and list elements.
+        Scalar leaves are JSON-encoded (to preserve types) then encrypted.
+        """
         if isinstance(obj, dict):
             out: Dict[str, Any] = {}
             for k, v in obj.items():
+                # ensure key is a string canonical form
                 if not isinstance(k, str):
                     k = json.dumps(k, separators=(",", ":"))
                 ek = self._enc_str(cipher, k)
@@ -87,118 +94,49 @@ class Cryptor:
 
     # ----- public API --------------------------------------------------------
 
-    # def encrypt(self, normalized_instruction: Dict[str, Any], logging = True) -> Dict[str, Any]:
-    #     raw_instruction = normalized_instruction.get("raw_instruction", "")
-    #     role = normalized_instruction.get("role", "")
-    #     policy = normalized_instruction.get("policy", "")
-    #     epoch = normalized_instruction.get("epoch", "")
-
-    #     # 1. KDF material
-    #     hctx_hex = self._hash_hex(raw_instruction)
-    #     salt_hex = self._hash_hex(role + policy + epoch)
-
-    #     # 2. Fernet key (now possibly modulated by θ)
-    #     hkp_key_bytes = self._hkp_key_bytes(hctx_hex, salt_hex)
-    #     fernet_key = base64.urlsafe_b64encode(hkp_key_bytes)
-    #     cipher = Fernet(fernet_key)
-
-    #     # 3. Canonical plaintext
-    #     canonical_plain = self._to_canonical(normalized_instruction)
-
-    #     # 4. Encrypt structure
-    #     enc_map = self._encrypt_structure(cipher, normalized_instruction)
-
-    #     # 5. Proof of possession
-    #     pop = self._hash_hex(canonical_plain + role + epoch)
-
-    #     # 6. Metadata
-    #     metadata = {"role": role, "epoch": epoch}
-    #     if self.include_kdf_hints:
-    #         metadata["kdf"] = {"hctx": hctx_hex, "salt": salt_hex}
-    #     if self.theta is not None:
-    #         metadata["theta"] = self.theta  # track applied theta for audit
-
-    #     packet = {"enc_map": enc_map, "pop": pop, "metadata": metadata}
-
-    #     # 7. Audit
-    #     if(logging == True):
-    #         self.logger.log(
-    #             component="Cryptor",
-    #             event="Encrypt",
-    #             details={
-    #                 "hctx": hctx_hex if self.include_kdf_hints else "<hidden>",
-    #                 "salt": salt_hex if self.include_kdf_hints else "<hidden>",
-    #                 "role": role,
-    #                 "epoch": epoch,
-    #                 "theta": self.theta if self.theta else "<default>",
-    #                 "shape": f"dict:{len(normalized_instruction)}",
-    #             },
-    #         )
-
-    #     return packet
-
     def encrypt(self, normalized_instruction: Dict[str, Any], logging: bool = True) -> Dict[str, Any]:
         """
-        Example encryption pipeline where θ influences obfuscation parameters.
-        θ values are in [0,1] and map onto PARAMS = [
-            'obfuscation_depth', 'noise_scale', 'mask_rate', 'unicode_rate', 'length_jitter'
-        ]
+        Proper encryption pipeline:
+        - create random hctx & salt (hex)
+        - derive key (HKP + theta) -> Fernet
+        - encrypt structure
+        - compute PoP and attach metadata.kdf {hctx,salt} (if configured)
+        - log (hctx, salt, theta) to audit logger for later retrieval by Decryptor
         """
-        packet = {"enc_map": {}}
+        # 1) KDF hints (random per-packet)
+        # Use 16 bytes random and hex encode
+        hctx = os.urandom(16)
+        salt = os.urandom(16)
+        hctx_hex = hctx.hex()
+        salt_hex = salt.hex()
 
-        obfuscation_depth = int(1 + self.theta[0] * 3)   # 1..4 levels
-        noise_scale       = self.theta[1]                # 0..1 fraction of chars noised
-        mask_rate         = self.theta[2]                # 0..1 fraction masked
-        unicode_rate      = self.theta[3]                # 0..1 chance of unicode substitution
-        length_jitter     = int(self.theta[4] * 5)       # add/remove up to ±5 chars
+        # 2) derive fernet key using theta-mixed HKP
+        key_bytes = self._hkp_key_bytes(hctx_hex, salt_hex)  # 32 bytes
+        fernet_key = base64.urlsafe_b64encode(key_bytes)
+        cipher = Fernet(fernet_key)
 
-        for k, v in normalized_instruction.items():
-            if isinstance(v, str):
-                text = v
-                # apply obfuscation depth
-                for _ in range(obfuscation_depth):
-                    text = text[::-1]  # naive: reverse repeatedly (placeholder)
+        # 3) encrypt structure (per-key & per-value)
+        enc_map = self._encrypt_structure(cipher, normalized_instruction)
 
-            # apply noise
-            if noise_scale > 0:
-                chars = list(text)
-                for i in range(len(chars)):
-                    if torch.rand(1).item() < noise_scale * 0.1:  # mild noise
-                        chars[i] = string.ascii_uppercase[torch.randint(0, len(string.ascii_uppercase), (1,)).item()]
-                text = "".join(chars)
+        # 4) compute PoP = sha256(canonical_plain + role + epoch)
+        role = normalized_instruction.get("role", "") if isinstance(normalized_instruction, dict) else ""
+        epoch = normalized_instruction.get("epoch", "") if isinstance(normalized_instruction, dict) else ""
+        canonical_plain = self._to_canonical(normalized_instruction)
+        pop = self._hash_hex(canonical_plain + role + epoch)
 
-            # apply mask
-            if mask_rate > 0:
-                chars = list(text)
-                for i in range(len(chars)):
-                    if torch.rand(1).item() < mask_rate:
-                        chars[i] = "*"
-                text = "".join(chars)
+        # 5) assemble packet
+        packet: Dict[str, Any] = {"enc_map": enc_map, "pop": pop, "metadata": {}}
+        if self.include_kdf_hints:
+            packet["metadata"]["kdf"] = {"hctx": hctx_hex, "salt": salt_hex}
+        packet["metadata"]["role"] = role
+        packet["metadata"]["epoch"] = epoch
 
-            # apply unicode substitution
-            if unicode_rate > 0:
-                chars = list(text)
-                for i in range(len(chars)):
-                    if torch.rand(1).item() < unicode_rate * 0.05:
-                        chars[i] = chr(0x2500 + (ord(chars[i]) % 256))  # box-drawing substitute
-                text = "".join(chars)
-
-            # length jitter
-            if length_jitter > 0:
-                jitter = torch.randint(-length_jitter, length_jitter + 1, (1,)).item()
-                if jitter > 0:
-                    text = text + ("#" * jitter)
-                elif jitter < 0:
-                    text = text[:jitter]
-
-                packet["enc_map"][k] = text
-            else:
-                packet["enc_map"][k] = v
-
+        # 6) audit log: save hctx/salt/theta so Decryptor.get_theta_for_packet can find theta later
         if logging and self.logger:
             try:
-                self.logger.log("Cryptor", "Encrypt", {"theta": self.theta})
+                self.logger.log("Cryptor", "Encrypt", {"hctx": hctx_hex, "salt": salt_hex, "theta": self.theta})
             except Exception:
+                # never fail encryption because logging misbehaved
                 pass
 
         return packet
