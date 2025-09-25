@@ -55,7 +55,7 @@ This section explains the complete lifecycle of a request through the Shruvaan M
 
 ---
 
-### 2. Normalization Stage (Prompter)
+### 2. Normalization Stage (Promptor)
 
 **Entry Function**: `normalized = p.normalize_instruction(instruction)`
 (`Prompter.normalize_instruction`)
@@ -139,32 +139,113 @@ This section explains the complete lifecycle of a request through the Shruvaan M
 
 ---
 
-### 5. Adaptive Training (Praeceptor - Internally uses Mimicus and Probator) 
+### 5. Adaptive Training (Praeceptor – Internally uses Mimicus and Probator)
 
 **Entry Function**: `result = praeceptor.train_until_safe(normalized, safe_threshold=0.25, max_steps=50)`
 
 **Input**:
-- Normalized plaintext
-- Safety threshold (max leakage tolerated)
+- `normalized` → plaintext JSON instruction (from Prompter)
+- `safe_threshold` → maximum tolerated leakage (default: 0.25)
+- `max_steps` → maximum training iterations
+
+---
 
 **Process**:
-1. Iteratively probes the system (via Mimicus + Probator)
-2. Estimates leakage score (mimic, prob, combined)
-3. If score > threshold → adjusts θ vector and re-runs
-4. Stops when leakage < threshold or max steps reached
+
+#### 1. Encrypt + Decrypt Loop
+- For each iteration, Praeceptor asks the Cryptor to encrypt using current θ
+- Decryptor recovers the plaintext back
+
+#### 2. Leakage Probing (Mimicus & Probator)
+
+##### a. Mimicus
+**Entry Function**: `result = run_mimicus(decrypted, packet, provider, api_key, logger, history_logger)`
+
+**Inputs**:
+- `decrypted`: current plaintext instruction
+- `packet`: encrypted JSON packet
+- `history_logger`: provides history of (encrypted, decrypted) pairs for context
+
+**Process**:
+- Uses LLM-based probing to mimic the decryption function
+- Looks at historical mappings between encrypted → decrypted from CryptoHistoryLogger
+- Attempts to guess the decrypted content of the new packet without access to the key
+- Produces leakage metrics:
+  - `entity_recovery` (how many entities guessed)
+  - `structural_fidelity` (JSON structure matched)
+  - `semantic_drift` (difference from ground truth)
+  - `leakage_score` (aggregate risk score)
+
+**Output Example**:
+```json
+{
+  "mimic_fields": { "intent": "transfer", "entities": {...} },
+  "components": {
+    "entity_recovery": 1.0,
+    "structural_fidelity": 1.0,
+    "semantic_drift": 0.004,
+    "leakage_score": 0.79
+  },
+  "decision": "raise_risk"
+}
+```
+
+##### b. Probator
+**Entry Function**: `result = run_probator(decrypted, packet, logger)`
+
+**Inputs**:
+- `decrypted`: current plaintext instruction
+- `packet`: encrypted JSON packet
+
+**Process**:
+- Uses statistical heuristics and prefix/ngram analysis to probe ciphertext
+- Detects scaffold leakage, injection vulnerability, or structural regularities
+- Produces probabilistic leakage score `Rprob`
+
+**Output Example**:
+```json
+{
+  "L_ngram": 0.033,
+  "L_prefix": 0.0,
+  "L_inject": 1.0,
+  "L_scaffold": 0.5,
+  "Rprob": 0.38
+}
+```
+
+#### 3. Theta Update (Feedback Loop)
+- Praeceptor combines Mimicus `leakage_score` and Probator `Rprob` into a combined leakage risk
+- If risk > safe_threshold → updates θ vector
+- Calls `cryptor.set_theta(updated_theta)` to directly inject the new parameters into Cryptor
+- Re-runs encryption/decryption with updated θ
+
+#### 4. Termination
+- Stops when leakage < threshold OR when max steps reached
+
+---
 
 **Output**:
 ```json
 {
   "success": true,
   "final_theta": [0.47, 0.61, 0.52, 0.49, 0.55],
-  "history": ["... intermediate mimic/prob scores ..."]
+  "history": [
+    { "step": 0, "mimic": 0.79, "prob": 0.38, "theta": [0.50, 0.50, 0.50, 0.50, 0.50] },
+    { "step": 1, "mimic": 0.42, "prob": 0.21, "theta": [0.47, 0.61, 0.52, 0.49, 0.55] }
+  ]
 }
 ```
 
-**Logging**: All iterations + chosen θ saved to audit logs
+---
+
+**Logging**:
+- Each probe result (Mimicus, Probator) logged
+- Each θ update logged by Praeceptor
+- CryptoHistoryLogger maintains encrypted ↔ decrypted pairs for use by Mimicus
+- Unified export to `audit_log.json` at end of run
 
 ---
+
 
 ### 6. Re-Encryption with Updated θ
 
