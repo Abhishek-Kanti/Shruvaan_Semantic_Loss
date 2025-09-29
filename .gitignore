@@ -1,3 +1,5 @@
 .env
 venv
 __pycache__
+praeceptor_checkpoint.pt
+audit_log.json

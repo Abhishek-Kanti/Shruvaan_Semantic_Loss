@@ -23,7 +23,7 @@ class BaseLLMClient:
 
 # Concrete client for Gemini
 class GeminiClient(BaseLLMClient):
-    def __init__(self, api_key: str, model: str = "gemini-1.5-flash"):
+    def __init__(self, api_key: str, model: str = "gemini-2.5-flash"):
         super().__init__(api_key, model)
         genai.configure(api_key=self.api_key)
         self.client = genai.GenerativeModel(self.model)
@@ -78,7 +78,7 @@ def create_llm_client(provider: str, api_key: str = None, model: str = None):
         key = api_key or os.getenv("GEMINI_API_KEY")
         if not key:
             raise ValueError("GEMINI_API_KEY not found.")
-        return GeminiClient(key, model or "gemini-1.5-flash")
+        return GeminiClient(key, model or "gemini-2.5-flash")
     elif provider.lower() == "openai":
         key = api_key or os.getenv("OPENAI_API_KEY")
         if not key:

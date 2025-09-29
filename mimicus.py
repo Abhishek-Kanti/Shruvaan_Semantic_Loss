@@ -397,7 +397,7 @@ class LeakageScoreCalculator:
 
         if self.nli_model:
             try:
-                results = self.nli_model(f"{orig_text} </s></s> {mimic_text}", return_all_scores=True)[0]
+                results = self.nli_model(f"{orig_text} </s></s> {mimic_text}", top_k=None)[0]
                 probs = {r["label"].lower(): r["score"] for r in results}
 
                 entail = probs.get("entailment", 0.0)
@@ -426,35 +426,33 @@ class LeakageScoreCalculator:
         return drift_score, {"drift_fallback": drift_score, "method": "llm-fallback"}
 
     def _perform_nli_semantic_assessment(self, original_text: str, mimic_text: str) -> float:
-        """
-        Fallback: use LLM to assign drift score directly 0.0–1.0.
-        """
         prompt = f"""
-Compare the semantic meaning and consistency between these two data descriptions:
+        Compare the semantic meaning and consistency between these two data descriptions:
 
-ORIGINAL DATA:
-{original_text}
+        ORIGINAL DATA:
+        {original_text}
 
-MIMIC DATA:
-{mimic_text}
+        MIMIC DATA:
+        {mimic_text}
 
-Using natural language inference, determine how much semantic drift exists between these descriptions. 
+        Respond with only a single float between 0.0 and 1.0.
+        Do not add text, explanation, or formatting.
+        """
+        resp = self.client.generate_content(prompt)
+        drift_str = resp.strip()
 
-Respond with only a number between 0.0 and 1.0 where:
-0.0 = identical meaning
-0.25 = minor differences
-0.5 = moderate drift
-0.75 = major differences
-1.0 = completely different
-"""
+        # Try direct parse
         try:
-            # The LLM call now uses the unified client
-            resp = self.client.generate_content(prompt)
-            drift_str = resp.strip()
             drift_val = float(drift_str)
-            return min(max(drift_val, 0.0), 1.0)
-        except Exception:
-            return 0.5  # fallback
+        except ValueError:
+            # Fallback: extract number if model added extra text
+            import re
+            match = re.search(r"[-+]?\d*\.\d+|\d+", drift_str)
+            if not match:
+                return 0.5  # keep legacy fallback for safety
+            drift_val = float(match.group(0))
+
+        return min(max(drift_val, 0.0), 1.0)
 
     def _flatten_entities(self, payload):
         out = {}
@@ -483,8 +481,8 @@ class Mimicus:
                  history_logger: Optional[CryptoHistoryLogger] = None,
                  alpha=0.4, beta=0.4, gamma=0.2,
                  leak_warn_threshold=0.6):
-        self.logger = logger or AuditLogger()
-        self.history_logger = history_logger or CryptoHistoryLogger()
+        self.logger = logger 
+        self.history_logger = history_logger 
 
         # The API key and model selection is now handled by the factory
         self.client = create_llm_client(provider, api_key=api_key)

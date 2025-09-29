@@ -246,50 +246,7 @@ This section explains the complete lifecycle of a request through the Shruvaan M
 
 ---
 
-
-### 6. Re-Encryption with Updated θ
-
-**Entry Function**: `packet2 = c.encrypt(normalized)`
-
-**Input**: Same normalized JSON, but Cryptor now has updated θ set by Praeceptor
-
-**Process**: Same as initial encryption, but key derivation is θ-modulated
-
-**Output**: New encrypted packet with stronger resistance to leakage
-
-**Logging**: New packet logged with updated θ
-
----
-
-### 7. Re-Decrypt
-
-**Entry Function**: `recovered2 = d.decrypt(packet2)`
-
-**Input**: Packet2
-
-**Process**: Same as before: reconstruct Fernet, decrypt recursively, PoP validation
-
-**Output**: Original normalized JSON again (proves backward compatibility)
-
-**Logging**: Recorded in logs
-
----
-
-### 8. Post-Training Probes
-
-#### Mimicus Probe
-**Function**: `mimic_result2 = run_mimicus(recovered2, packet2, ...)`
-- Tests how much of plaintext can still be guessed by the adversary model
-- Produces structured leakage report (entity_recovery, leakage_score, decision: "raise_risk"/"safe")
-
-#### Probator Probe  
-**Function**: `probator_result2 = run_probator(recovered2, packet2, ...)`
-- Runs statistical probes (n-grams, prefix, scaffold, injection risk)
-- Produces risk probability score
-
----
-
-### 9. Export Logs
+### 5. Export Logs
 
 **Entry Function**: `logger.export("audit_log.json")`
 
@@ -306,19 +263,14 @@ Instruction (str)
    ↓
 Prompter.normalize → normalized JSON
    ↓
+Praeceptor.train_until_safe → (Mimicus + Probator probes → leakage/risk reports) → updates θ
+   ↓
 Cryptor.encrypt → encrypted packet (+KDF metadata, PoP)
    ↓
 Decryptor.decrypt → plaintext recovery
    ↓
-Praeceptor.train_until_safe → updates θ
-   ↓
-Cryptor.encrypt (again, with θ)
-   ↓
-Decryptor.decrypt (compatibility check)
-   ↓
-Mimicus + Probator probes → leakage/risk reports
-   ↓
 Audit log export
+
 ```
 
 ## 📁 File Structure

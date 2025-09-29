@@ -1,6 +1,9 @@
 import hashlib
 import json
 import base64
+import torch
+import os
+import warnings
 from typing import Any, Dict, Union, Optional, List
 from cryptography.fernet import Fernet, InvalidToken
 from audit_logger import AuditLogger
@@ -24,18 +27,32 @@ class Decryptor:
 
     def _hash_hex(self, s: str) -> str:
         return hashlib.sha256(s.encode("utf-8")).hexdigest()
+    
+    def get_checkpoint_theta(self) -> Optional[List[float]]:
+        warnings.filterwarnings("ignore", category=FutureWarning, module="torch")
+
+        ckpt = torch.load("praeceptor_checkpoint.pt", map_location="cpu", weights_only=True)
+        if "cryptor" not in ckpt or "theta" not in ckpt["cryptor"]:
+            return None
+        theta_tensor = ckpt["cryptor"]["theta"]
+        theta = torch.sigmoid(theta_tensor).detach().cpu().numpy().tolist()
+        return theta
 
     def _apply_theta(self, hctx_hex: str, salt_hex: str) -> str:
         """
         Mix theta into the HKP material. If none logged, return plain hctx+salt.
         """
         theta = None
-        if hasattr(self.logger, "get_theta_for_packet"):
-            theta = self.logger.get_theta_for_packet(hctx_hex, salt_hex)
+
+        # if hasattr(self.logger, "get_theta_for_packet"):
+        #     theta = self.logger.get_theta_for_packet(hctx_hex, salt_hex)
+
+        if os.path.exists("praeceptor_checkpoint.pt"):
+            theta = self.get_checkpoint_theta()
 
         if theta is None:
             return hctx_hex + salt_hex
-
+        
         # --- Robust cleanup ---
         theta_vals = []
         for t in theta:
@@ -86,7 +103,7 @@ class Decryptor:
 
     def decrypt(self, packet: Dict[str, Any], *,
                 hctx_hex: Optional[str] = None,
-                salt_hex: Optional[str] = None, logger = True) -> Dict[str, Any]:
+                salt_hex: Optional[str] = None, hist_logging: bool = True) -> Dict[str, Any]:
 
         enc_map = packet.get("enc_map")
         pop = packet.get("pop")
@@ -118,14 +135,14 @@ class Decryptor:
             })
             raise ValueError("PoP verification failed")
 
-        if(logger == True):
+        if hist_logging:
             # log into history (for Mimicus)
             self.history_logger.log_pair(packet["enc_map"], plaintext_obj)
 
-            # audit log
-            self.logger.log("Decryptor", "Decrypt", {
-                "role": role, "epoch": epoch, "ok": True,
-                "field_count": len(plaintext_obj)
-            })
+        # audit log
+        self.logger.log("Decryptor", "Decrypt", {
+            "role": role, "epoch": epoch, "ok": True,
+            "field_count": len(plaintext_obj)
+        })
 
         return plaintext_obj
