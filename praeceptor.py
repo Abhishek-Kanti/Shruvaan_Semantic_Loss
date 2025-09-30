@@ -14,6 +14,8 @@ from torch.distributions import Normal
 from mimicus import run_mimicus
 from probator import run_probator
 from llm_client import create_llm_client
+from dotenv import load_dotenv
+load_dotenv()
 
 # optional loggers
 try:
@@ -31,6 +33,13 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 BETA1, BETA2, BETA3 = 0.4, 0.5, 0.1
 LAMBDA_DPO = 0.2
 CHECKPOINT_PATH = "praeceptor_checkpoint.pt"
+
+# For Alignment scoring
+provider_alignment = "openai"  # or "gemini", "groq"
+api_key_alignment = os.getenv("OPENAI_API_KEY")
+ALIGNMENT_PROMPT = """Analyze the following decrypted and encrypted text. Rate the alignment from 0 (completely misaligned) to 10 (perfectly aligned). 
+Alignment is defined by: 1) Original intent is preserved, 2) Sensitive information is sufficiently obfuscated, 3) Output is fluent and logical. Output only the numerical score."""
+
 
 # --------- kernels ----------
 class RBFKernel:
@@ -112,6 +121,15 @@ class KernelMixer(nn.Module):
         return torch.nan_to_num(out, nan=0.0, posinf=1.0, neginf=-1.0)
 
 # ---------- Experience / buffer ----------
+class AlignmentExperience:
+    """
+    Stores a single alignment judgment for preference learning.
+    """
+    def __init__(self, state, action, alignment_score: float):
+        self.state = state.detach()
+        self.action = action.detach()
+        self.alignment_score = alignment_score
+
 class DPOExperience:
     def __init__(self, state, preferred_action, rejected_action, reward_diff):
         self.state, self.preferred_action, self.rejected_action, self.reward_diff = state.detach(), preferred_action.detach(), rejected_action.detach(), reward_diff
@@ -155,6 +173,10 @@ class Praeceptor:
         self.device = device
         self.checkpoint_path = checkpoint_path
 
+        self.alignment_buffer = ExperienceBuffer(capacity=5000)
+        self.recent_mimic = deque(maxlen=50)
+        self.recent_prob = deque(maxlen=50)
+
         # inject cryptor/decryptor (for training loops)
         self.cryptor_instance = cryptor
         self.decryptor_instance = decryptor
@@ -168,6 +190,7 @@ class Praeceptor:
         # self.cryptor = CryptorCascade().to(self.device)
 
         # training buffers & optimizer
+        self.alignment_buffer = ExperienceBuffer(capacity=5000)
         self.exp_buffer = ExperienceBuffer(capacity=2000)
         params = (list(self.controller.parameters()) +
                   list(self.action_encoder.parameters()) +
@@ -179,10 +202,44 @@ class Praeceptor:
         self.recent_mimic = deque(maxlen=50)
         self.recent_prob = deque(maxlen=50)
 
+        #llm for alignment scoring
+        self.alignmentClient = create_llm_client(provider_alignment, api_key=api_key_alignment)
+
         # load checkpoint if present
         self.load_checkpoint()
 
     # ------------------ internal helpers ------------------
+    def _create_preference_pairs(self, alignment_batch: List[AlignmentExperience]) -> List[Any]:
+        """
+        Turn alignment experiences into DPO-style preference pairs.
+        Returns a list of DPOExperience objects.
+        """
+        preference_pairs = []
+        for i in range(len(alignment_batch)):
+            for j in range(i + 1, len(alignment_batch)):
+                exp_a, exp_b = alignment_batch[i], alignment_batch[j]
+
+                # Skip if scores are too close (no clear preference)
+                if abs(exp_a.alignment_score - exp_b.alignment_score) < 0.5:
+                    continue
+
+                if exp_a.alignment_score > exp_b.alignment_score:
+                    preferred, rejected = exp_a, exp_b
+                    reward_diff = exp_a.alignment_score - exp_b.alignment_score
+                else:
+                    preferred, rejected = exp_b, exp_a
+                    reward_diff = exp_b.alignment_score - exp_a.alignment_score
+
+                dpo_exp = DPOExperience(
+                    state=preferred.state,
+                    preferred_action=preferred.action,
+                    rejected_action=rejected.action,
+                    reward_diff=reward_diff
+                )
+                preference_pairs.append(dpo_exp)
+
+        return preference_pairs
+    
     def _build_state(self, decrypted: Dict[str, Any], encrypted: Dict[str, Any], mimic_score: float, prob_score: float) -> torch.Tensor:
         enc_text = json.dumps(encrypted)
         plain_text = json.dumps(decrypted)
@@ -271,6 +328,20 @@ class Praeceptor:
         if torch.isnan(total_dpo) or torch.isinf(total_dpo):
             return torch.tensor(0.0, device=self.device)
         return total_dpo
+    
+    def judge_alignment(self, decrypted, encrypted) -> float:
+        decrypted_text = json.dumps(decrypted)
+        encrypted_text = json.dumps(encrypted)
+        prompt = ALIGNMENT_PROMPT.format(
+            decrypted_text=decrypted_text,
+            encrypted_text=encrypted_text
+        )
+        try:
+            response = self.alignmentClient.generate_content(prompt)
+            score_text = response.strip()
+            return max(0.0, min(10.0, float(score_text)))
+        except Exception:
+            return 5.0
 
     # ------------------ core API: single-step policy update ------------------
     def step_update(self,
@@ -318,14 +389,22 @@ class Praeceptor:
                 if self.logger:
                     try: self.logger.log("Praeceptor", "SetThetaFail", {"error": str(e)})
                     except Exception: pass
+        
+        # 4. LLM alignment classification (BCO)
+        alignment_score = self.judge_alignment(decrypted, encrypted)
+        
+        # 5. collect alignment experience
+        if collect_preference and torch.rand(1).item() < dpo_collect_prob:
+            alignment_exp = AlignmentExperience(state, action, alignment_score)
+            self.alignment_buffer.add(alignment_exp)
 
-        # 4. leakage loss (paper formula)
+        # 6. leakage loss (paper formula)
         mimic_loss = torch.tensor(float(mimic_score), device=self.device)
         risk_loss = torch.tensor(float(prob_score), device=self.device)
         entropy_term = -dist.entropy().mean()
         leakage_loss_val = BETA1 * mimic_loss + BETA2 * risk_loss + BETA3 * entropy_term
 
-        # 5. gather DPO preference example (approximate)
+        # 7. gather DPO preference example (approximate)
         dpo_loss_val = torch.tensor(0.0, device=self.device)
         if collect_preference and torch.rand(1).item() < dpo_collect_prob:
             alt_action = dist.rsample()
@@ -337,12 +416,12 @@ class Praeceptor:
                 exp = DPOExperience(state, alt_action, action, reward_B - reward_A)
             self.exp_buffer.add(exp)
 
-        # 6. DPO batch update (if available)
+        # 8. DPO batch update (if available)
         if len(self.exp_buffer) > self.batch_size:
             batch = self.exp_buffer.sample(self.batch_size)
             dpo_loss_val = self._train_step_dpo(batch)
 
-        # 7. combine and update
+        # 9. combine and update
         total_loss = leakage_loss_val + LAMBDA_DPO * dpo_loss_val
         if torch.isnan(total_loss) or torch.isinf(total_loss):
             if self.logger:
@@ -448,14 +527,24 @@ class Praeceptor:
             mimic_score = float(mimic_res.get("leakage_score", 0.0))
             prob_score = float(prob_res.get("Rprob", 0.0))
             combined_leak = BETA1 * mimic_score + BETA2 * prob_score
+            alignment_score = self.judge_alignment(recovered, packet)
 
-            hist.append({"step": step, "mimic": mimic_score, "prob": prob_score,
-                        "combined": combined_leak, "theta": theta_tensor})
+            alignment_exp = AlignmentExperience(state, action, alignment_score)
+            self.alignment_buffer.add(alignment_exp)
+
+            hist.append({
+                "step": step, 
+                "mimic": mimic_score, 
+                "prob": prob_score,
+                "combined": combined_leak, 
+                "alignment": alignment_score,
+                "theta": theta_tensor
+            })
 
             if verbose:
-                print(f"[Inner {step}] mimic={mimic_score:.4f}, prob={prob_score:.4f}, combined={combined_leak:.4f}")
+                print(f"[Inner {step}] mimic={mimic_score:.4f}, prob={prob_score:.4f}, combined={combined_leak:.4f}, alignment={alignment_score:.2f}")
 
-            if combined_leak <= safe_threshold:
+            if combined_leak <= safe_threshold and alignment_score >= 7.0:
                 return {"success": True, "final_theta": theta_tensor, "history": hist}
 
             # ----------------- 5. Policy Gradient (REINFORCE) -----------------
@@ -469,9 +558,15 @@ class Praeceptor:
 
             # ----------------- 6. DPO Loss -----------------
             dpo_loss_val = torch.tensor(0.0, device=self.device)
-            if len(self.exp_buffer) > self.batch_size:
-                batch = self.exp_buffer.sample(self.batch_size)
-                dpo_loss_val = self._train_step_dpo(batch)
+
+            # BCO alignment-driven preference optimization
+            if len(self.alignment_buffer) > self.batch_size * 2:
+                alignment_batch = self.alignment_buffer.sample(self.batch_size * 2)
+                preference_pairs = self._create_preference_pairs(alignment_batch)
+
+                if preference_pairs:
+                    dpo_batch = random.sample(preference_pairs, min(self.batch_size, len(preference_pairs)))
+                    dpo_loss_val = self._train_step_dpo(dpo_batch)
 
             total_loss = policy_loss + entropy_reg + LAMBDA_DPO * dpo_loss_val
 

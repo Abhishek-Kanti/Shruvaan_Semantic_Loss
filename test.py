@@ -54,12 +54,12 @@ for step_hist in result["history"]:
     print(f"Step {step_hist['step']}: θ={step_hist['theta']} mimic={step_hist['mimic']:.4f} prob={step_hist['prob']:.4f}")
 
 # 3. Encrypt (with whatever θ is now in cryptor)
-print("\n=== Encrypt (Final) ===")
+print("\n=== Encrypt (Outside Praeceptor) ===")
 packet = c.encrypt(normalized)
 print(json.dumps(packet, indent=2)[:500] + " ...")
 
 # 4. Decrypt
-print("\n=== Decrypt ===")
+print("\n=== Decrypt (Outside Praeceptor) ===")
 recovered = d.decrypt(packet)
 print(json.dumps(recovered, indent=2))
 

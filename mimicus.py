@@ -507,8 +507,8 @@ class Mimicus:
 
     def _llm_mimic(self, current_enc: Dict[str, Any]) -> Dict[str, Any]:
         history = self.history_logger.load_recent(n=10)
-        if history:
-            history = history[:-1]
+        # if history:
+        #     history = history[:-1]
 
         filtered_history = [
             pair for pair in history
