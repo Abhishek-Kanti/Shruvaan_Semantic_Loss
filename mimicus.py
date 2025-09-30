@@ -303,7 +303,14 @@ from llm_client import create_llm_client
 
 from transformers import pipeline
 import torch
+import torch.nn.functional as F
 import logging
+
+from transformers import (
+    pipeline,
+    AutoTokenizer,
+    AutoModelForSequenceClassification
+)
 
 class LeakageScoreCalculator:
     """
@@ -319,24 +326,20 @@ class LeakageScoreCalculator:
         self.alpha = alpha
         self.beta = beta
         self.gamma = gamma
-        self.client = client  # Now holds the unified LLM client
+        self.client = client
 
-        # Detect device (GPU if available, else CPU)
         device = 0 if torch.cuda.is_available() else -1
-        device_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU"
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         try:
-            # Load HuggingFace NLI model once
-            self.nli_model = pipeline(
-                "text-classification",
-                model="facebook/bart-large-mnli",
-                device=device,
-                top_k=None
-            )
-            # print(f"[Mimicus] NLI model loaded on {device_name}")  # direct console print
+            self.nli_tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-mnli")
+            self.nli_model = AutoModelForSequenceClassification.from_pretrained(
+                "facebook/bart-large-mnli"
+            ).to(self.device)
+            self.nli_model.eval()
         except Exception as e:
-            self.nli_model = None
-            # print(f"[Mimicus] Failed to load NLI model: {e}")
+            print(f"[Mimicus] Failed to load NLI model: {e}")
+            self.nli_model, self.nli_tokenizer = None, None
 
         # weight important entities
         self.entity_weights = {
@@ -387,40 +390,44 @@ class LeakageScoreCalculator:
         return float(overlap)
 
     def _semantic_drift(self, original, mimic) -> Tuple[float, Dict[str, float]]:
-        """
-        Semantic drift via NLI.
-        Primary: BART-MNLI probabilities.
-        Fallback: LLM regression drift scoring.
-        """
         orig_text = json.dumps(original, default=str)
         mimic_text = json.dumps(mimic, default=str)
 
-        if self.nli_model:
+        if self.nli_model and self.nli_tokenizer:
             try:
-                results = self.nli_model(f"{orig_text} </s></s> {mimic_text}", top_k=None)[0]
-                probs = {r["label"].lower(): r["score"] for r in results}
+                # Encode as premise (orig) and hypothesis (mimic)
+                inputs = self.nli_tokenizer(
+                    orig_text,
+                    mimic_text,
+                    return_tensors="pt",
+                    truncation=True,
+                    max_length=512
+                ).to(self.device)
 
-                entail = probs.get("entailment", 0.0)
-                neutral = probs.get("neutral", 0.0)
-                contra = probs.get("contradiction", 0.0)
+                with torch.no_grad():
+                    logits = self.nli_model(**inputs).logits
+                    probs = F.softmax(logits, dim=-1).cpu().numpy()[0]
+
+                # HuggingFace NLI order is usually: contradiction, neutral, entailment
+                contra, neutral, entail = probs.tolist()
 
                 entropy = -sum(p * math.log(p + 1e-10) for p in [entail, neutral, contra])
 
-                drift = contra  # contradiction probability as main drift
-
+                drift = contra  # contradiction as main drift signal
                 metrics = {
                     "entailment_prob": entail,
                     "neutral_prob": neutral,
                     "contradiction_prob": contra,
                     "nli_entropy": entropy,
-                    "method": "bart-mnli"
+                    "method": "bart-mnli-direct"
                 }
+                # print(f"[Mimicus] NLI succeeded: {metrics}")
                 return drift, metrics
 
-            except Exception:
-                pass
+            except Exception as e:
+                print(f"[Mimicus] NLI failed inside try: {e}")
 
-        # --- Fallback LLM regression scoring ---
+        # --- fallback if NLI fails ---
         drift_score = self._perform_nli_semantic_assessment(orig_text, mimic_text)
         print(f"LLM-based drift score (fallback): {drift_score:.3f}")
         return drift_score, {"drift_fallback": drift_score, "method": "llm-fallback"}

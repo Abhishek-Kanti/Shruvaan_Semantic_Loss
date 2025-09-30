@@ -32,7 +32,7 @@ praeceptor = Praeceptor(
 )
 
 print("\n=== Instruction ===")
-instruction = "transfer $1500 from 6495-8845-2791 to 5459-6423-4401"
+instruction = "transfer $1500 from 6495-8845-2799 to 9459-6423-4401"
 print(f"Instruction: {instruction}")
 
 # 1. Normalize
