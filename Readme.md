@@ -15,6 +15,44 @@ Shruvaan MCP is a multi-stage pipeline that processes natural language financial
 - **Probator**: Statistical analysis for risk assessment
 - **Praeceptor**: Adaptive training system that trains and updates theta of the cryptor to change the encryption, making it stronger when leakage crosses the threshold
 
+## 📁 Repo Structure
+
+```
+SHRUVAAN_MCP/
+│
+├─ assets/                  # images, plots, media
+│
+├─ utils/                   # helper code
+│   ├─ audit_logger.py
+│   ├─ crypto_history_logger.py
+│   ├─ llm_client.py
+│   └─ plotter.py
+│
+├─ venv/                    # virtual environment
+│   ├─ .env
+│   └─ .env.example
+│
+├─ .gitignore
+├─ audit_log.json             # general purpuse logger
+├─ crypto_history.json        # encryption-decryption history logger
+├─ cryptor.py
+├─ decryptor.py
+├─ mimicus.py
+├─ policy.py
+├─ praeceptor_checkpoint.pt   # stores trained theta
+├─ praeceptor.py
+├─ probator.py
+├─ prompter.py
+├─ Readme.md
+├─ requirements.txt
+└─ test.py                    # for running the pipeline
+
+```
+
+## 🈺 Shruvaan Code Flow
+
+[![Shruvaan Code Flow](assets/Shruvaan_code_flow.png)](https://www.canva.com/design/DAGeOYKP3Xk/eoyLb7qAl62SU44uliwDJA/view?utlId=h78e9a98d01)
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -268,6 +306,8 @@ Praeceptor.train_until_safe → (Mimicus + Probator probes → leakage/risk repo
 Cryptor.encrypt → encrypted packet (+KDF metadata, PoP)
    ↓
 Decryptor.decrypt → plaintext recovery
+   ↓
+plotter.plot_all → plot all the relevent graphs
    ↓
 Audit log export
 

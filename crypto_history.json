@@ -23,30 +23,5 @@
       "epoch": "2025-09-26T17:28:47.381466+00:00",
       "raw_instruction": "transfer $1500 from 6395-8845-2791 to 6559-6423-4401"
     }
-  },
-  {
-    "timestamp": "2025-09-30T17:07:25.102612+00:00",
-    "encrypted": {
-      "gAAAAABo3A5Mzs_az5RVm_OVwcpXIBzIAtV3HT0mVPkeQOJTFO6iaqUeJgL-b7IfFPBLLBo5wBwTrXT3eoJh8df4bJKKlu9ktw==": "gAAAAABo3A5Ms2jpJgTOr2tkMwPtEB6wSGSdFo0VbHGkqKUPBJASo4abKYNK2wNRpIKhAW8I0S-AwC9IS8CZvzJFAwAYxMkhLg==",
-      "gAAAAABo3A5MWsgcQ_yOXVsG2Dk4gwU2ooubLZGueb1QbV0luhiK4p9ivRj4DOW_F3y0ESEUGWjB0Ljqr2wE48rvcTGAwfgb-Q==": "gAAAAABo3A5MExK2EoKZTER2Bz6o_dovSztLP-EQZOHoRFJ9R3GiIPMoCOEPCASVyYrVF7ZWMlxZpfJsUbg_f8gzYMJ4SaTR4g==",
-      "gAAAAABo3A5MBAx1TqS-gfuTgZeWS5klC3tKGout1dUoSSQvPItesaR9jJi29xt2ADXxzx3B09fuY7XhzpLEceNCUFvV1cXiHw==": "gAAAAABo3A5MX593Y8SdxMtpEbhXTqUvG-6i46Bm1nNqn5wylSUYOQAmofonzdUzY--QZcdYKaqXoFAQ89uAeZ8_p2fpkg3s9g==",
-      "gAAAAABo3A5M-5KP798Pg1iuRen9oNE9AX0tXsv4maGWcN6_QCGM_3akdyHr_mi-yviSwXwfcYs0552S6Dkp4KQr5IgaWCzzaw==": "gAAAAABo3A5MqnjkoFq6LpAMWYGtyz5EHVp8lbndYG3S6s_4kk4FjyVeyedRp0Ib6i3Cee65_t7oyrtD6rOXvnMWmcvm-mQG1JclPppLz8ebJwOISd7tjKM=",
-      "gAAAAABo3A5MLl19ho4jSAc91o8PvH3r-Dlkw7AbGYjPSkH8ioMZFZRkiilQaS-6yLRn2aaT3IAU12SjDkFMzfoBL49LxDdFew==": "gAAAAABo3A5MNARmgK8dht2xYUMLTAMyGcVcNVAVsmgBsk20ouyv13IkxzZ8yumwxaltWTL-c2eigk5qsRG9KVoYnXPJvckUWyil7VVtDxb-WzBOe54-fx8=",
-      "gAAAAABo3A5MT9p9ZqnAvZXKZoFjaLdqslQaLoYvujk_El8g0wMuIbXWAznvIDt7Qa4n4bIfj8qwnFkeedfqogYTv80pQJm2ow==": "gAAAAABo3A5Mw88xXqAxfUS_cLHKxKfMbgqe9maUuYncED6TXJzm7fJRuSD7IFpCflZW49p3xJLxA8twEBK8qjkcufUu-5mjig==",
-      "gAAAAABo3A5MpuKYkrKDOMmf0GPUr1XHK2staOJKd0SmGgtwBfzUTcKHjf-0zdGUA9Qw3mlIqM7oCQ8lcRMlCpO8XFbS-RBf8Q==": "gAAAAABo3A5MmqkkfaFZLcI5jslGhkD7OBoV5uPbh2eKdGs2m_NHdEFcAH5G2UYONW_eueNdu4B6fw3KOuFDqILyeGHUZYp2lQ==",
-      "gAAAAABo3A5MUZQpfoTmzcZ4Y9owWwfGmt18ZSrMbm1t8v1B13E5VPVWZuLW-4kB-n1u3lX02E1Su95v_EsAq6BsBw-MZLgdyg==": "gAAAAABo3A5MNe69UJv8znCcqzbnzyGdOxxilngMpOrbLmkIflyknYlxc22kxXcicdtxd9c9uQEm_yOftx0iIpBEU3r0VV2NckhMcFsvcus2lLc6zgOQ1jDmbO-SOjfcwO2c__C_faz9",
-      "gAAAAABo3A5MLwdPCsFnbdXW6LnBpDC8q5DcS72miq2Upn2r4rWktakonGS6x57nFM8hTYRTnbgA2lT8pUKEUvUIew6TA2hBGg==": "gAAAAABo3A5MsiNwXM5z8GZyaNGclY3NdDJqwD0TqSpXaGE_oJ9pYp0JEUZq4wp_iIPne2YHlvkxW3OK4cWog1gpS2PCnR-tddahfV56xSW8JYHaLKOdPD-vfjcRecjiUSBf8vNPcN4RFGptMpZ7YmEDGx7v-LvCaw=="
-    },
-    "decrypted": {
-      "action": "transfer",
-      "amount": 1500,
-      "currency": "$",
-      "from_account": "6495-8845-2791",
-      "to_account": "5459-6423-4401",
-      "policy": "\u226410000",
-      "role": "TellerAgent",
-      "epoch": "2025-09-30T17:05:39.290108+00:00",
-      "raw_instruction": "transfer $1500 from 6495-8845-2791 to 5459-6423-4401"
-    }
   }
 ]

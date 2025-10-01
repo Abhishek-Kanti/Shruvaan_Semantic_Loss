@@ -6,8 +6,8 @@ import base64
 from typing import Any, Dict, Union, Optional, List
 
 from cryptography.fernet import Fernet
-from audit_logger import AuditLogger
-from crypto_history_logger import CryptoHistoryLogger
+from utils.audit_logger import AuditLogger
+from utils.crypto_history_logger import CryptoHistoryLogger
 
 import torch
 import warnings

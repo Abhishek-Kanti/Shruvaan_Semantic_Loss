@@ -1,8 +1,8 @@
 import json
 from datetime import datetime, timezone
 from dotenv import load_dotenv
-from llm_client import create_llm_client
-from audit_logger import AuditLogger
+from utils.llm_client import create_llm_client
+from utils.audit_logger import AuditLogger
 
 load_dotenv()
 

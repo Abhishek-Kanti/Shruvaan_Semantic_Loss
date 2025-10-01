@@ -6,8 +6,8 @@ import os
 import warnings
 from typing import Any, Dict, Union, Optional, List
 from cryptography.fernet import Fernet, InvalidToken
-from audit_logger import AuditLogger
-from crypto_history_logger import CryptoHistoryLogger
+from utils.audit_logger import AuditLogger
+from utils.crypto_history_logger import CryptoHistoryLogger
 
 JsonObj = Union[Dict[str, Any], List[Any], str, int, float, bool, None]
 

@@ -297,9 +297,9 @@ from typing import Any, Dict, Optional, Tuple
 import os
 import math
 
-from audit_logger import AuditLogger
-from crypto_history_logger import CryptoHistoryLogger
-from llm_client import create_llm_client
+from utils.audit_logger import AuditLogger
+from utils.crypto_history_logger import CryptoHistoryLogger
+from utils.llm_client import create_llm_client
 
 from transformers import pipeline
 import torch

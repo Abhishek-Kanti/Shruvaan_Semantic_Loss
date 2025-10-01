@@ -1,4 +1,4 @@
-from audit_logger import AuditLogger
+from utils.audit_logger import AuditLogger
 from prompter import Prompter
 from cryptor import Cryptor
 from decryptor import Decryptor
@@ -6,7 +6,8 @@ from praeceptor import Praeceptor
 import os
 from dotenv import load_dotenv
 import json
-from crypto_history_logger import CryptoHistoryLogger
+from utils.crypto_history_logger import CryptoHistoryLogger
+from utils.plotter import plot_all
 
 # === Setup ===
 load_dotenv()
@@ -42,7 +43,7 @@ print(json.dumps(normalized, indent=2))
 
 # 2. Run Praeceptor training loop until safe or max steps
 print("\n=== Praeceptor Training (Inner Loop) ===")
-result = praeceptor.train_until_safe(normalized, safe_threshold=0.25, max_steps=5, verbose=True)
+result = praeceptor.train_until_safe(normalized, safe_threshold=0.25, max_steps=1, verbose=True)
 
 print("\n=== Praeceptor Training Result ===")
 print("Success:", result["success"])
@@ -62,6 +63,10 @@ print(json.dumps(packet, indent=2)[:500] + " ...")
 print("\n=== Decrypt (Outside Praeceptor) ===")
 recovered = d.decrypt(packet)
 print(json.dumps(recovered, indent=2))
+
+# === Plotting ===
+hist = result["history"]
+plot_all(hist)
 
 # === Export unified log ===
 print("\n=== Export unified log ===")

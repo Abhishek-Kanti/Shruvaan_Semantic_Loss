@@ -13,14 +13,14 @@ from torch.distributions import Normal
 # Import existing project probes and flexible LLM client
 from mimicus import run_mimicus
 from probator import run_probator
-from llm_client import create_llm_client
+from utils.llm_client import create_llm_client
 from dotenv import load_dotenv
 load_dotenv()
 
 # optional loggers
 try:
-    from audit_logger import AuditLogger
-    from crypto_history_logger import CryptoHistoryLogger
+    from utils.audit_logger import AuditLogger
+    from utils.crypto_history_logger import CryptoHistoryLogger
 except Exception:
     AuditLogger = None
     CryptoHistoryLogger = None
@@ -32,13 +32,21 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 # loss weights
 BETA1, BETA2, BETA3 = 0.4, 0.5, 0.1
 LAMBDA_DPO = 0.2
+LAMBDA_BCO = 0.5   # Binary Classifier Optimization weight
+BCO_SCORE_THRESHOLD = 7.0  # alignment threshold to label positive
 CHECKPOINT_PATH = "praeceptor_checkpoint.pt"
 
 # For Alignment scoring
 provider_alignment = "openai"  # or "gemini", "groq"
 api_key_alignment = os.getenv("OPENAI_API_KEY")
 ALIGNMENT_PROMPT = """Analyze the following decrypted and encrypted text. Rate the alignment from 0 (completely misaligned) to 10 (perfectly aligned). 
-Alignment is defined by: 1) Original intent is preserved, 2) Sensitive information is sufficiently obfuscated, 3) Output is fluent and logical. Output only the numerical score."""
+Alignment is defined by: 1) Original intent is preserved, 2) Sensitive information is sufficiently obfuscated, 3) Output is fluent and logical. Output only the numerical score.
+Decrypted text:
+{decrypted_text}
+
+Encrypted text:
+{encrypted_text}
+"""
 
 
 # --------- kernels ----------
@@ -133,6 +141,10 @@ class AlignmentExperience:
 class DPOExperience:
     def __init__(self, state, preferred_action, rejected_action, reward_diff):
         self.state, self.preferred_action, self.rejected_action, self.reward_diff = state.detach(), preferred_action.detach(), rejected_action.detach(), reward_diff
+class ClassifierExample:
+    def __init__(self, state, action, label: int):
+        self.state = state.detach(); self.action = action.detach(); self.label = int(label)
+
 class ExperienceBuffer:
     def __init__(self, capacity=2000): self.buffer = deque(maxlen=capacity)
     def add(self, experience): self.buffer.append(experience)
@@ -187,14 +199,23 @@ class Praeceptor:
         self.controller = HierarchicalPraeceptorController(state_dim=state_dim).to(self.device)
         self.action_encoder = ActionEncoder(input_dim=len(PARAMS)).to(self.device)
         self.km = KernelMixer(device=self.device).to(self.device)
-        # self.cryptor = CryptorCascade().to(self.device)
+
+        # classifier head for Binary Classifier Optimization (BCO)
+        # it will consume concatenated [state_emb, action_emb]
+        self.classifier = nn.Sequential(
+            nn.Linear(128 + 128, 64),
+            nn.ReLU(),
+            nn.Linear(64, 1)
+        ).to(self.device)
 
         # training buffers & optimizer
         self.alignment_buffer = ExperienceBuffer(capacity=5000)
         self.exp_buffer = ExperienceBuffer(capacity=2000)
+        self.classifier_buffer = ExperienceBuffer(capacity=5000)
         params = (list(self.controller.parameters()) +
                   list(self.action_encoder.parameters()) +
-                  list(self.km.parameters()))
+                  list(self.km.parameters()) +
+                  list(self.classifier.parameters()))
         self.optimizer = torch.optim.Adam(params, lr=lr)
         self.batch_size = 32
 
@@ -210,26 +231,18 @@ class Praeceptor:
 
     # ------------------ internal helpers ------------------
     def _create_preference_pairs(self, alignment_batch: List[AlignmentExperience]) -> List[Any]:
-        """
-        Turn alignment experiences into DPO-style preference pairs.
-        Returns a list of DPOExperience objects.
-        """
         preference_pairs = []
         for i in range(len(alignment_batch)):
             for j in range(i + 1, len(alignment_batch)):
                 exp_a, exp_b = alignment_batch[i], alignment_batch[j]
-
-                # Skip if scores are too close (no clear preference)
                 if abs(exp_a.alignment_score - exp_b.alignment_score) < 0.5:
                     continue
-
                 if exp_a.alignment_score > exp_b.alignment_score:
                     preferred, rejected = exp_a, exp_b
                     reward_diff = exp_a.alignment_score - exp_b.alignment_score
                 else:
                     preferred, rejected = exp_b, exp_a
                     reward_diff = exp_b.alignment_score - exp_a.alignment_score
-
                 dpo_exp = DPOExperience(
                     state=preferred.state,
                     preferred_action=preferred.action,
@@ -237,7 +250,6 @@ class Praeceptor:
                     reward_diff=reward_diff
                 )
                 preference_pairs.append(dpo_exp)
-
         return preference_pairs
     
     def _build_state(self, decrypted: Dict[str, Any], encrypted: Dict[str, Any], mimic_score: float, prob_score: float) -> torch.Tensor:
@@ -336,19 +348,53 @@ class Praeceptor:
             decrypted_text=decrypted_text,
             encrypted_text=encrypted_text
         )
+
         try:
-            response = self.alignmentClient.generate_content(prompt)
+            response = 0.0   #alignment needs to be modified, llm always returns 0.0 thus disabling for now
+            # response = self.alignmentClient.generate_content(prompt)
             score_text = response.strip()
             return max(0.0, min(10.0, float(score_text)))
         except Exception:
             return 5.0
+
+    # ------------------ BCO (Binary Classifier Optimization) helpers ------------------
+    def add_classifier_example(self, state: torch.Tensor, action: torch.Tensor, label: int):
+        """Add a labeled (state, action, label) example to the classifier buffer.
+        label is 0 or 1.
+        """
+        try:
+            self.classifier_buffer.add(ClassifierExample(state, action, int(label)))
+            return True
+        except Exception:
+            return False
+
+    def _train_step_bco(self, batch_size: int = None) -> torch.Tensor:
+        """Train the binary classifier with BCE loss on (state, action) pairs."""
+        if len(self.classifier_buffer) == 0:
+            return torch.tensor(0.0, device=self.device)
+        bsize = batch_size or self.batch_size
+        samples = self.classifier_buffer.sample(bsize)
+        states = torch.cat([s.state for s in samples], dim=0)
+        actions = torch.cat([s.action for s in samples], dim=0)
+        labels = torch.tensor([s.label for s in samples], dtype=torch.float32, device=self.device).unsqueeze(1)
+
+        # produce embeddings
+        s_emb = self.controller.enc(states)  # (B,128)
+        a_emb = self.action_encoder(actions)  # (B,128)
+        cat = torch.cat([s_emb, a_emb], dim=-1)
+        logits = self.classifier(cat)
+        loss = F.binary_cross_entropy_with_logits(logits, labels)
+        if torch.isnan(loss) or torch.isinf(loss):
+            return torch.tensor(0.0, device=self.device)
+        return loss
 
     # ------------------ core API: single-step policy update ------------------
     def step_update(self,
                     decrypted: Dict[str, Any],
                     encrypted: Dict[str, Any],
                     collect_preference: bool = True,
-                    dpo_collect_prob: float = 0.1) -> Dict[str, Any]:
+                    dpo_collect_prob: float = 0.1,
+                    classifier_collect_prob: float = 0.5) -> Dict[str, Any]:
         """
         Single-step pipeline: probes -> state -> sample theta -> compute leakage loss -> update weights
         Returns: debug dict with theta, leakage numbers, diagnostics.
@@ -390,13 +436,18 @@ class Praeceptor:
                     try: self.logger.log("Praeceptor", "SetThetaFail", {"error": str(e)})
                     except Exception: pass
         
-        # 4. LLM alignment classification (BCO)
+        # 4. LLM alignment classification (used for labels)
         alignment_score = self.judge_alignment(decrypted, encrypted)
         
         # 5. collect alignment experience
         if collect_preference and torch.rand(1).item() < dpo_collect_prob:
             alignment_exp = AlignmentExperience(state, action, alignment_score)
             self.alignment_buffer.add(alignment_exp)
+
+        # 5b. optionally collect classifier labels (BCO) based on alignment score
+        if torch.rand(1).item() < classifier_collect_prob:
+            label = 1 if alignment_score >= BCO_SCORE_THRESHOLD else 0
+            self.add_classifier_example(state, action, label)
 
         # 6. leakage loss (paper formula)
         mimic_loss = torch.tensor(float(mimic_score), device=self.device)
@@ -421,8 +472,13 @@ class Praeceptor:
             batch = self.exp_buffer.sample(self.batch_size)
             dpo_loss_val = self._train_step_dpo(batch)
 
-        # 9. combine and update
-        total_loss = leakage_loss_val + LAMBDA_DPO * dpo_loss_val
+        # 9. BCO (Binary Classifier Optimization) update
+        bco_loss_val = torch.tensor(0.0, device=self.device)
+        if len(self.classifier_buffer) >= self.batch_size:
+            bco_loss_val = self._train_step_bco(self.batch_size)
+
+        # 10. combine and update
+        total_loss = leakage_loss_val + LAMBDA_DPO * dpo_loss_val + LAMBDA_BCO * bco_loss_val
         if torch.isnan(total_loss) or torch.isinf(total_loss):
             if self.logger:
                 try: self.logger.log("Praeceptor", "SkipUpdate", {"reason": "NaN/Inf total_loss"})
@@ -434,19 +490,22 @@ class Praeceptor:
         torch.nn.utils.clip_grad_norm_(
             list(self.controller.parameters()) +
             list(self.action_encoder.parameters()) +
-            list(self.km.parameters()),
+            list(self.km.parameters()) +
+            list(self.classifier.parameters()),
             max_norm=1.0
         )
         self.optimizer.step()
 
         out = {
-            "theta": theta_proposed,  # now returns the applied sampled theta
+            "theta": theta_proposed,
             "leakage": {"mimic": mimic_score, "prob": prob_score},
             "nli_metrics": mimic_result.get("components", {}),
             "prob_metrics": prob_result,
             "state": state.cpu().numpy().tolist(),
             "total_loss": float(total_loss.detach().cpu().numpy()),
             "dpo_loss": float(dpo_loss_val.detach().cpu().numpy()) if isinstance(dpo_loss_val, torch.Tensor) else float(dpo_loss_val),
+            "bco_loss": float(bco_loss_val.detach().cpu().numpy()) if isinstance(bco_loss_val, torch.Tensor) else float(bco_loss_val),
+            "classifier_buffer_size": len(self.classifier_buffer)
         }
         if self.logger:
             try: self.logger.log("Praeceptor", "StepUpdate", out)
@@ -489,7 +548,7 @@ class Praeceptor:
             return {
                 "success": False,
                 "reason": "decrypt_failed",
-                "final_theta": final_theta,
+                "final_theta": None,
                 "error": str(e)
             }
 
@@ -532,6 +591,10 @@ class Praeceptor:
             alignment_exp = AlignmentExperience(state, action, alignment_score)
             self.alignment_buffer.add(alignment_exp)
 
+            # add classifier labels
+            label = 1 if alignment_score >= BCO_SCORE_THRESHOLD else 0
+            self.add_classifier_example(state, action, label)
+
             hist.append({
                 "step": step, 
                 "mimic": mimic_score, 
@@ -559,23 +622,27 @@ class Praeceptor:
             # ----------------- 6. DPO Loss -----------------
             dpo_loss_val = torch.tensor(0.0, device=self.device)
 
-            # BCO alignment-driven preference optimization
             if len(self.alignment_buffer) > self.batch_size * 2:
                 alignment_batch = self.alignment_buffer.sample(self.batch_size * 2)
                 preference_pairs = self._create_preference_pairs(alignment_batch)
-
                 if preference_pairs:
                     dpo_batch = random.sample(preference_pairs, min(self.batch_size, len(preference_pairs)))
                     dpo_loss_val = self._train_step_dpo(dpo_batch)
 
-            total_loss = policy_loss + entropy_reg + LAMBDA_DPO * dpo_loss_val
+            # ----------------- 7. BCO loss (classifier) -----------------
+            bco_loss_val = torch.tensor(0.0, device=self.device)
+            if len(self.classifier_buffer) >= self.batch_size:
+                bco_loss_val = self._train_step_bco(self.batch_size)
+
+            total_loss = policy_loss + entropy_reg + LAMBDA_DPO * dpo_loss_val + LAMBDA_BCO * bco_loss_val
 
             self.optimizer.zero_grad()
             total_loss.backward()
             torch.nn.utils.clip_grad_norm_(
                 list(self.controller.parameters()) +
                 list(self.action_encoder.parameters()) +
-                list(self.km.parameters()),
+                list(self.km.parameters()) +
+                list(self.classifier.parameters()),
                 max_norm=1.0
             )
             self.optimizer.step()
@@ -597,12 +664,20 @@ class Praeceptor:
                 "controller": self.controller.state_dict(),
                 "action_encoder": self.action_encoder.state_dict(),
                 "km": self.km.state_dict(),
-                # Save raw theta tensor (not sigmoid yet)
-                "cryptor": {
-                    "theta": self.cryptor.theta.detach().cpu()
-                },
-                "optimizer": self.optimizer.state_dict(),
+                "classifier": self.classifier.state_dict(),
+                # Save raw theta tensor (not sigmoid yet) if cryptor exists
             }
+            # save cryptor theta only if available
+            if hasattr(self, 'cryptor') and getattr(self, 'cryptor', None) is not None:
+                try:
+                    state["cryptor"] = {"theta": self.cryptor.theta.detach().cpu()}
+                except Exception:
+                    pass
+            if hasattr(self, 'optimizer') and self.optimizer is not None:
+                try:
+                    state["optimizer"] = self.optimizer.state_dict()
+                except Exception:
+                    pass
             torch.save(state, path)
             if self.logger:
                 try:
@@ -627,11 +702,15 @@ class Praeceptor:
             self.controller.load_state_dict(state.get("controller", {}))
             self.action_encoder.load_state_dict(state.get("action_encoder", {}))
             self.km.load_state_dict(state.get("km", {}))
+            if "classifier" in state:
+                try:
+                    self.classifier.load_state_dict(state.get("classifier", {}))
+                except Exception:
+                    pass
             if "optimizer" in state:
                 try:
                     self.optimizer.load_state_dict(state["optimizer"])
                 except Exception:
-                    # optimizer states can be device-specific; ignore if fails
                     pass
             if self.logger:
                 try: self.logger.log("Praeceptor", "LoadCheckpoint", {"path": path})
